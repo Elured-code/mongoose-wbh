@@ -13,6 +13,8 @@ class Star:
             logger.debug('Initialising star object')
             self.starName = ''
             self.starType = ''
+            self.starSubType = ''
+            self.starClass = ''
 
     @property
     def starName(self):
@@ -65,43 +67,94 @@ class Star:
             else:  
                 logger.debug('Determining Special object type')  
                 roll = dice.D6Rollx2()
+
+                # Handle non-giants first
+
                 if roll <= 10:
+                    
+                    # Determine the stellar class
+                    
                     self.starClass = tables.SPECIAL_STAR_CLASSES[roll - 2]
                     logger.debug('Star class is %s', self.starClass)
-                pass
                 
+                    # Now determine the stellar type
+                    # First for Class VI stars
+
+                    if self.starClass == 'VI':
+                        logger.debug('Determining Class VI type')
+                        roll = dice.D6Rollx2() + 1
+                         
+                        # Hot subdwarfs first
+
+                        if roll > 11:
+                            self.starType = \
+                            tables.HOT_STAR_TYPES[dice.D6Rollx2()]
+                              
+                            # Change Type A to Type B
+
+                            if self.starType == 'A': self.starType = 'B'
+
+                            self.starSubType = \
+                            tables.STAR_SUBTYPES[dice.D6Roll() - 2]
+
+                        else:
+                            self.starType = \
+                            tables.STAR_TYPES[dice.D6Rollx2()]
+
+                            # Change Type F to Type G
+
+                            if self.starType == 'F':  self.starType = 'G'
+
+                            self.starSubType = \
+                            tables.STAR_SUBTYPES[dice.D6Roll() - 2]
+
+                    # Now determine for Class IV stars
+
+                    elif self.starClass == 'IV':
+                        pass
+
+                # Now handle giants
+                
+                else:
+                    pass
+
         # Modified rolls of 12 or greateer are Hot stars, handle them here
 
-        elif roll > 12:
+        elif roll >= 12:
                 logger.debug('Determining Hot star type')
                 roll = dice.D6Rollx2()
                 self.starType = tables.HOT_STAR_TYPES[roll - 2]   
-                logger.debug('Star type is %s', self.starType)         
+                logger.debug('Star type is %s', self.starType) 
+                self.starSubType = tables.STAR_SUBTYPES[dice.D6Rollx2() - 2]
+                logger.debug('Star subtype is $s', self.starSubType)
+                self.starClass = 'V'
+
 
         # 'Normal' main sequence stars
 
-        logger.debug('Determining Normal object type')
+        else:
+            logger.debug('Determining Normal object type')
 
-        # Subtract an additional 1 from the roll as a roll of 2 is 
-        # a Special object
+            # Subtract an additional 1 from the roll as a roll of 2 is 
+            # a Special object
 
-        self.starType = tables.STAR_TYPES[roll - 3] 
-        self.starClass = 'V'
+            self.starType = tables.STAR_TYPES[roll - 3] 
+            self.starClass = 'V'
 
-        # Determine the subtype
+            # Determine the subtype
 
-        logger.debug('Determining subtype') 
-        if self.starType != 'M':
-            logger.debug('Determining subtype for %s class', self.starClass)
-            self.starSubType = tables.STAR_SUBTYPES[dice.D6Rollx2() - 2]
-        elif isPrimary:
-            logger.debug('Determinng subtype for %s class (PRIMARY)', \
-                         self.starClass)
-            self.starSubType = tables.MSTAR_SUBTYPES[dice.D6Rollx2() - 2]
-        else: 
-             logger.debug('Determinng subtype for %s class (NON-PRIMARY)', \
-                         self.starClass)
-             self.starSubType = tables.STAR_SUBTYPES[dice.D6Rollx2() - 2]
+            logger.debug('Determining subtype') 
+            if self.starType != 'M':
+                logger.debug('Determining subtype for %s class', self.starClass)
+                self.starSubType = tables.STAR_SUBTYPES[dice.D6Rollx2() - 2]
+            elif isPrimary:
+                logger.debug('Determinng subtype for %s class (PRIMARY)', \
+                            self.starClass)
+                self.starSubType = tables.MSTAR_SUBTYPES[dice.D6Rollx2() - 2]
+            else: 
+                logger.debug('Determinng subtype for %s class (NON-PRIMARY)', \
+                            self.starClass)
+                self.starSubType = tables.STAR_SUBTYPES[dice.D6Rollx2() - 2]
 
         logger.debug('Star type is %s', self.starType)
         logger.debug('Star subtype is %s', self.starSubType)

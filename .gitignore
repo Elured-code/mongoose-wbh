@@ -10,3 +10,4 @@ dist/
 .vscode/launch.json
 .vscode/settings.json
 vscode/settings.json
+src/__pycache__/star.cpython-310.pyc

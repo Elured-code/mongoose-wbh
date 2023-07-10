@@ -15,7 +15,7 @@ formatter = logging.Formatter('%(asctime)s %(name)s [%(funcName)-12s\t] \
                               '%d/%m/%Y %I:%M:%S %p')
 handler.setFormatter(formatter)
 logger.addHandler(handler)
-logger.setLevel(logging.DEBUG)
+logger.setLevel(logging.WARNING)
 
 # Create a JSON object containing the system data
 
@@ -101,9 +101,22 @@ class System:
         pass
 
 if __name__ == '__main__':
-    this_System = System('Test System')
-    this_System.genSystem()
-    
+    these_Systems = []
+    for x in range(1, 101):
+        this_System = System('Test System')
+        this_System.genSystem()
+        these_Systems.append(this_System)
+
+    j = 0
+    for a_System in these_Systems:
+        
+        i = 0
+        for star in a_System.Stars:
+            print('System %s Index %s: %s%s %s' % (j, i, star.starType, star.starSubType, star.starClass))
+            i += 1
+
+
+
     # systemJSON = json.dumps(createSystemJSON(this_System), indent=4)
 
     # print(systemJSON)
