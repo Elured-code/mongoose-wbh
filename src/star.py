@@ -104,7 +104,10 @@ class Star:
                 # Now handle giants
                 
                 else:
-                    pass
+                    sDetails = self.genGiantStar()
+                    self.starClass = sDetails[0]
+                    self.starType = sDetails[1]
+                    self.starSubType = sDetails[2]                    
 
         # Modified rolls of 12 or greateer are Hot stars, handle them here
 
@@ -244,3 +247,40 @@ class Star:
     #
     # Generate a giant star
     #
+
+    def genGiantStar(self):
+        logging.debug('Determining Giant class')
+        r = dice.D6Rollx2() - 2
+        sClass = tables.GIANT_STAR_CLASSES(r)
+
+        logging.debug('Determining Giant type')
+
+        # Remember to always subtract 3 when using the STAR_TYPES table
+        # DM +1 for Giants on this table, upper limit remains 12
+
+        r = dice.D6Rollx2() + 1
+
+        # Ignore Special results
+        if r < 3: r = 3
+
+        # Note that the bounds of the roll will now be 3 to 13
+
+        # A roll of 12 indicates a hot giant, roll on the Hot table
+
+        if r >= 12:
+            logging.debug('Determining Hot Giant type')
+            r2 = dice.D6Rollx2() - 2
+            sType = tables.HOT_STAR_TYPES(r2)
+
+        # Otherwise use the normal type table (roll is now 3 to 11)
+        # Subtract 3 to get the correct table entry
+
+        else:
+            logging.debug('Determining non-Hot Giant type')
+            sType = tables.STAR_TYPES(r - 3)
+
+        # Now determine the subtype
+
+        logging.debug('Determining the Giant subtype')
+        r = dice.D6Rollx2() - 2
+        sSubType = tables.STAR_SUBTYPES[r]        
