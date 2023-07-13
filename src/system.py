@@ -102,7 +102,7 @@ class System:
 
 if __name__ == '__main__':
     these_Systems = []
-    for x in range(1, 101):
+    for x in range(1, 10001):
         this_System = System('Test System')
         this_System.genSystem()
         these_Systems.append(this_System)
@@ -112,10 +112,9 @@ if __name__ == '__main__':
         
         i = 0
         for star in a_System.Stars:
-            print('System %s Index %s: %s%s %s' % (j, i, star.starType, star.starSubType, star.starClass))
+            print('System %s \tIndex %s: \t%s%s %s' % (j+1, i, star.starType, star.starSubType, star.starClass))
             i += 1
-
-
+        j += 1
 
     # systemJSON = json.dumps(createSystemJSON(this_System), indent=4)
 
