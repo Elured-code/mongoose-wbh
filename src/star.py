@@ -50,6 +50,14 @@ class Star:
     @starMass.setter
     def starMass(self, starMass):
         self.__starMass = starMass
+
+    @property
+    def starTemp(self):
+        return self.__starTemp
+    
+    @starTemp.setter
+    def starTemp(self, starTemp):
+        self.__starTemp = starTemp
     
     # Determine the star type
     # MGT2 WBH pp15-16
@@ -143,40 +151,59 @@ class Star:
         logger.debug('Star subtype is %s', self.starSubType)
         logger.debug('Star class is %s', self.starClass)
 
-    def genStarMass(self, aClass, aType, aSubType):
+    def genStarMass(self):
 
-        # Build a query from the star class, type and subtype
+            # Build a query from the star class, type and subtype
 
-        db = TinyDB('db.json')
-        q = Query()
-        r = db.search((q.starClass == aClass) & (q.starType == aType) \
-                      & (q.starSubType == aSubType))
+            db = TinyDB('db.json')
+            q = Query()
+            r = db.search((q.starClass == self.starClass) \
+                        & (q.starType == self.starType) \
+                        & (q.starSubType == self.starSubType))
+            
+            # There shouldn't be duplicates, but only accept the first result
+
+            r = r[0]
+
+            # Vary the stellar mass around the base mass by up to 20%
+            # Using a normal distribution with a standard deviation of 7% 
+            # of the base mass, so about 99.5% of values will fall within 
+            # the 20% value
+
+            mass = numpy.random.normal(r['baseMass'], r['baseMass'] * 0.07, 1) 
+
+            # Because numpy.random can return multiple values, select the first
+            # (of one in this case)
+            # Round the result to 3 decimals and return
+
+            self.starMass = round(mass[0], 3)
+
+
+
         
-        # There shouldn't be duplicates, but only accept the first result
+    def genStarTemp(self):
+            
+            # Build a query from the star class, type and subtype
 
-        r = r[0]
+            db = TinyDB('db.json')
+            q = Query()
+            r = db.search((q.starClass == self.starClass) \
+                        & (q.starType == self.starType) \
+                        & (q.starSubType == self.starSubType))
+            
+            # There shouldn't be duplicates, but only accept the first result
 
-        # Vary the stellar mass around the base mass by up to 20%
-        # Using a normal distribution with a standard deviation of 7% 
-        # of the base mass, so about 99.5% of values will fall within 
-        # the 20% value
-
-        mass = numpy.random.normal(r['baseMass'], r['baseMass'] * 0.07, 1) 
-
-        # Because numpy.random can return multiple values, select the first
-        # (of one in this case)
-        # Round the result to 3 decimals and return
-
-        self.starMass = round(mass[0], 3)
-        
-  
+            r = r[0]
+            self.starTemp = r['baseTemp']
+            
     # Generate the star, calling the previous object methods to determine
     # stellar characteristics
     #
     
     def genStar(self, dm, includeUnusual, isPrimary):
         self.genStarType(dm, includeUnusual, isPrimary)
-        self.genStarMass(self.starClass, self.starType, self.starSubType)
+        self.genStarMass()
+        self.genStarTemp()
 
         # Debugging code to catch non-typed stars
 
@@ -390,37 +417,11 @@ class Star:
 
         return sClass, sType, sSubType 
 
-        self.genStarMass(self.starClass, self.starType, self.starSubType)
-
-
-    def genStarMass(self, aClass, aType, aSubType):
-
-            # Build a query from the star class, type and subtype
-
-            db = TinyDB('db.json')
-            q = Query()
-            r = db.search((q.starClass == aClass) & (q.starType == aType) \
-                        & (q.starSubType == aSubType))
-            
-            # There shouldn't be duplicates, but only accept the first result
-
-            r = r[0]
-
-            # Vary the stellar mass around the base mass by up to 20%
-            # Using a normal distribution with a standard deviation of 7% 
-            # of the base mass, so about 99.5% of values will fall within 
-            # the 20% value
-
-            mass = numpy.random.normal(r['baseMass'], r['baseMass'] * 0.07, 1) 
-
-            # Because numpy.random can return multiple values, select the first
-            # (of one in this case)
-            # Round the result to 3 decimals and return
-
-            self.starMass = round(mass[0], 3)
+    
 
 if __name__ == '__main__':
     thisStar = Star()
     thisStar.genStar(0, False, True)
 
-    print(thisStar.starMass)      
+    print(thisStar.starMass) 
+    print(thisStar.starTemp)     
