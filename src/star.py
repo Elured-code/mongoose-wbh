@@ -17,6 +17,7 @@ class Star:
             self.starType = ''
             self.starSubType = ''
             self.starClass = ''
+            self.starMass = 0
 
     @property
     def starName(self):
