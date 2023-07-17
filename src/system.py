@@ -53,6 +53,7 @@ def createSystemJSON(System):
             starJSON['Stellar Type'] = star.starType
             starJSON['Subtype'] = star.starSubType
             starJSON['Stellar Class'] = star.starClass
+            starJSON['Stellar Mass'] = star.starMass
             
             starsJSON.append(starJSON)
             
@@ -95,14 +96,25 @@ class System:
         star_Primary.genStar(0, False, True)
         self.Stars.append(star_Primary)
 
-    # Write system details to a JSON document
+        # Calculate the system age
+        # First, if there are no post-stellar objects
 
-    def createJSON(self):
+        # if self.Stars[0].starClass == 'V':  self.genSystemAgePrimary(self)
+    
+    # Determine the system's age based on the primary
+
+    def genSystemAgePrimary(self):
+
+        # Main sequence stars first
+        # determine the star life span
+
         pass
+
+    # Determine the system's age based on post-stellar objects
 
 if __name__ == '__main__':
     these_Systems = []
-    for x in range(1, 101):
+    for x in range(1, 2):
         this_System = System('Test System')
         this_System.genSystem()
         these_Systems.append(this_System)
@@ -117,9 +129,9 @@ if __name__ == '__main__':
 
 
 
-    # systemJSON = json.dumps(createSystemJSON(this_System), indent=4)
+    systemJSON = json.dumps(createSystemJSON(this_System), indent=4)
 
-    # print(systemJSON)
+    print(systemJSON)
 
 
 
