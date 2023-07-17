@@ -52,6 +52,7 @@ class Star:
     
     # Determine the star type
     # MGT2 WBH pp15-16
+    #
 
     def genStarType(self, dm, includeUnusual, isPrimary):
         logger.debug('Determining star type')
@@ -68,9 +69,15 @@ class Star:
                 roll = dice.D6Rollx2()
                 logger.debug('Determining Unusual object type')
 
+                # Roll again on the Peculiar table on a roll of 2
+
                 if roll == 2: 
                      logger.debug('Determining Peculiar object type')
-                     self.starType = 'Peculiar'
+
+                # Otherwise pick from the Unusual table     
+                
+                else:
+                    pass
 
             # Otherwise roll for a Special type
             
@@ -80,7 +87,7 @@ class Star:
 
                 # Handle non-giants first
 
-                if roll <= 10:
+                if roll <= 8:
                     
                     # Determine the stellar class
                     
@@ -93,78 +100,43 @@ class Star:
                     if self.starClass == 'VI':
                         logger.debug('Determining Class VI type')
                         roll = dice.D6Rollx2() + 1
-                         
-                        # Hot subdwarfs first
-
-                        if roll > 11:
-                            self.starType = \
-                            tables.HOT_STAR_TYPES[dice.D6Rollx2()]
-                              
-                            # Change Type A to Type B
-
-                            if self.starType == 'A': self.starType = 'B'
-
-                            self.starSubType = \
-                            tables.STAR_SUBTYPES[dice.D6Roll() - 2]
-
-                        else:
-                            self.starType = \
-                            tables.STAR_TYPES[dice.D6Rollx2()]
-
-                            # Change Type F to Type G
-
-                            if self.starType == 'F':  self.starType = 'G'
-
-                            self.starSubType = \
-                            tables.STAR_SUBTYPES[dice.D6Roll() - 2]
+                        sDetails = self.genSubDwarfStar()
+                        self.starClass = sDetails[0]
+                        self.starType = sDetails[1]
+                        self.starSubType = sDetails[2]
 
                     # Now determine for Class IV stars
 
                     elif self.starClass == 'IV':
-                        pass
+                        sDetails = self.genSubGiantStar()
+                        self.starClass = sDetails[0]
+                        self.starType  = sDetails[1]
+                        self.starSubType = sDetails[2]
 
                 # Now handle giants
                 
                 else:
-                    pass
+                    sDetails = self.genGiantStar()
+                    self.starClass = sDetails[0]
+                    self.starType = sDetails[1]
+                    self.starSubType = sDetails[2]                    
 
-        # Modified rolls of 12 or greateer are Hot stars, handle them here
+        # Modified rolls of 12 or greater are Hot stars, handle them here
 
         elif roll >= 12:
-                logger.debug('Determining Hot star type')
-                roll = dice.D6Rollx2()
-                self.starType = tables.HOT_STAR_TYPES[roll - 2]   
-                logger.debug('Star type is %s', self.starType) 
-                self.starSubType = tables.STAR_SUBTYPES[dice.D6Rollx2() - 2]
-                logger.debug('Star subtype is $s', self.starSubType)
-                self.starClass = 'V'
+            sDetails = self.genHotStar()
+            self.starClass = sDetails[0]
+            self.starType = sDetails[1]
+            self.starSubType = sDetails[2]
 
-
-        # 'Normal' main sequence stars
+        # All others are 'normal' main sequence stars
 
         else:
             logger.debug('Determining Normal object type')
-
-            # Subtract an additional 1 from the roll as a roll of 2 is 
-            # a Special object
-
-            self.starType = tables.STAR_TYPES[roll - 3] 
-            self.starClass = 'V'
-
-            # Determine the subtype
-
-            logger.debug('Determining subtype') 
-            if self.starType != 'M':
-                logger.debug('Determining subtype for %s class', self.starClass)
-                self.starSubType = tables.STAR_SUBTYPES[dice.D6Rollx2() - 2]
-            elif isPrimary:
-                logger.debug('Determinng subtype for %s class (PRIMARY)', \
-                            self.starClass)
-                self.starSubType = tables.MSTAR_SUBTYPES[dice.D6Rollx2() - 2]
-            else: 
-                logger.debug('Determinng subtype for %s class (NON-PRIMARY)', \
-                            self.starClass)
-                self.starSubType = tables.STAR_SUBTYPES[dice.D6Rollx2() - 2]
+            sDetails = self.genMainSequenceStar(roll, isPrimary)
+            self.starClass = sDetails[0]
+            self.starType = sDetails[1]
+            self.starSubType = sDetails[2]
 
         logger.debug('Star type is %s', self.starType)
         logger.debug('Star subtype is %s', self.starSubType)
@@ -199,15 +171,219 @@ class Star:
   
     # Generate the star, calling the previous object methods to determine
     # stellar characteristics
+    #
     
     def genStar(self, dm, includeUnusual, isPrimary):
         self.genStarType(dm, includeUnusual, isPrimary)
 
-        self.genStarMass(self.starClass, self.starType, self.starSubType)
+        # Debugging code to catch non-typed stars
 
+        if self.starType == '': input("Press Enter to continue...")
 
-if __name__ == '__main__':
-    thisStar = Star()
-    thisStar.genStar(0, False, True)
+    #
+    # Generate a main sequence star
+    #
 
-    print(thisStar.starMass)
+    def genMainSequenceStar(self, roll, isPrimary):
+        logger.debug('Determining Normal object type')
+
+        # Subtract an additional 1 from the roll as a roll of 2 is 
+        # a Special object
+
+        sType = tables.STAR_TYPES[roll - 3] 
+        sClass = 'V'
+
+        # Determine the subtype
+
+        logger.debug('Determining subtype') 
+
+        # Non Type M stars first
+
+        if sType != 'M':
+            logger.debug('Determining subtype for %s class', sClass)
+            r = dice.D6Rollx2() - 2
+            sSubType = tables.STAR_SUBTYPES[r]
+        
+        # Type M stars are a special case and vary from primary to others
+        
+        elif isPrimary:
+            logger.debug('Determinng subtype for %s class (PRIMARY)', \
+                        sClass)
+            r = dice.D6Rollx2() - 2
+            sSubType = tables.MSTAR_SUBTYPES[r]
+        else: 
+            logger.debug('Determining subtype for %s class (NON-PRIMARY)', \
+                        sClass)
+            r = dice.D6Rollx2() - 2
+            sSubType = tables.STAR_SUBTYPES[r]        
+
+        logger.debug('Returning class %s, type %s, subtype %s', sClass, sType, sSubType)
+        return sClass, sType, sSubType
+    
+    #
+    # Generate a hot main sequence star
+    #
+
+    def genHotStar(self):
+        sClass = 'V'
+        logger.debug('Determining Hot star type')
+        r = dice.D6Rollx2() - 2
+        sType = tables.HOT_STAR_TYPES[r]         
+        
+        logger.debug('Determining Hot star subtype')
+        r = dice.D6Rollx2() - 2        
+        sSubType = tables.STAR_SUBTYPES[r]
+        
+        logger.debug('Returning class %s, type %s, subtype %s', sClass, sType, sSubType)
+        return sClass, sType, sSubType
+
+    #
+    # Generate a subdwarf star
+    #
+
+    def genSubDwarfStar(self):
+        logger.debug('Determining subgiant star type')
+        sClass = 'VI'
+        roll = dice.D6Rollx2() + 1
+            
+        # Hot subdwarfs first
+
+        if roll > 11:
+            logging.debug('Determining hot subdwarf star subtype')
+            r = dice.D6Rollx2() - 2
+            sType = tables.HOT_STAR_TYPES[r]
+                
+            # Change Type A to Type B
+
+            if self.starType == 'A': self.starType = 'B'
+
+            logger.debug('Determining hot subdwarf star subtype')
+            r = dice.D6Rollx2() - 2
+            sSubType = tables.STAR_SUBTYPES[r]
+
+        # Now all other subdwarfs
+
+        else:
+
+            # Remember to always subtract 3 when using the STAR_TYPES table
+
+            logging.debug('Determining subdwarf type')
+            r = dice.D6Rollx2() - 3
+
+            # Hot subdwards
+
+            if r == 9:
+                r2 = dice.D6Rollx2() - 2
+                sType = tables.HOT_STAR_TYPES[r2]
+
+            # 'Normal' subdwarfs
+
+            else: sType = tables.STAR_TYPES[r]
+
+            # Change Type F to Type G
+
+            if sType == 'F':  sType = 'G'
+
+            # Change Type A to Type B
+
+            if sType == 'A':  sType = 'B'
+
+            logging.debug('Determining subdwarf subtype')
+            r = dice.D6Rollx2() - 2
+            sSubType = tables.STAR_SUBTYPES[r]
+
+        logger.debug('Returning class %s, type %s, subtype %s', sClass, sType, sSubType)
+        return sClass, sType, sSubType
+    
+    #
+    # Generate a subgiant star
+    #
+
+    def genSubGiantStar(self):
+        sClass = 'IV'
+        logging.debug('Determining Subgiant type')
+        r = dice.D6Rollx2() - 3 + 1 # +1 DM for class rolls
+                                    # -2 to match table index
+
+        # Deal with hot subgiants first
+
+        if r >= 9:
+            r2 = dice.D6Rollx2() - 2
+            sType = tables.HOT_STAR_TYPES[r2]
+
+            # Change O to B
+
+            if sType == 'O': sType = 'B'
+
+            # Now determine the subtype
+
+            logging.debug('Determining star subtype')
+            r3 = dice.D6Rollx2() - 2
+            sSubType = tables.STAR_SUBTYPES[r]
+
+        # Now non-hot sugiants
+
+        else:
+
+            # Limit Class IV to the range B0 - K4
+
+            if r in range(1, 5): r += 5
+
+            # Cap the roll at 8 to avoid the 'Hot' result
+
+            if r >= 8: r = 8
+
+            sType = tables.STAR_TYPES[r]
+
+            logging.debug('Determining star subtype')
+            r = dice.D6Rollx2() - 2
+            sSubType = tables.STAR_SUBTYPES[r]
+
+            # Any K5 or lower gets converted to K4
+
+            if (sType == 'K') and (sSubType > 4): sSubType = 4
+
+        return sClass, sType, sSubType
+
+    #
+    # Generate a giant star
+    #
+
+    def genGiantStar(self):
+        logging.debug('Determining Giant class')
+        r = dice.D6Rollx2() - 2
+        sClass = tables.GIANT_STAR_CLASSES[r]
+
+        logging.debug('Determining Giant type')
+
+        # Remember to always subtract 3 when using the STAR_TYPES table
+        # DM +1 for Giants on this table, upper limit remains 12
+
+        r = dice.D6Rollx2() + 1
+
+        # Ignore Special results
+        if r < 3: r = 3
+
+        # Note that the bounds of the roll will now be 3 to 13
+
+        # A roll of 12 indicates a hot giant, roll on the Hot table
+
+        if r >= 12:
+            logging.debug('Determining Hot Giant type')
+            r2 = dice.D6Rollx2() - 2
+            sType = tables.HOT_STAR_TYPES[r2]
+
+        # Otherwise use the normal type table (roll is now 3 to 11)
+        # Subtract 3 to get the correct table entry
+
+        else:
+            logging.debug('Determining non-Hot Giant type')
+            sType = tables.STAR_TYPES[r - 3]
+
+        # Now determine the subtype
+
+        logging.debug('Determining the Giant subtype')
+        r = dice.D6Rollx2() - 2
+        sSubType = tables.STAR_SUBTYPES[r] 
+
+        return sClass, sType, sSubType       

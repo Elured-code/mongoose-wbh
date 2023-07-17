@@ -124,9 +124,11 @@ if __name__ == '__main__':
         
         i = 0
         for star in a_System.Stars:
-            print('System %s Index %s: %s%s %s' % (j, i, star.starType, star.starSubType, star.starClass))
+            print('System %s \tIndex %s: \t%s%s %s' % (j+1, i, star.starType, star.starSubType, star.starClass))
             i += 1
+        j += 1
 
+    systemJSON = json.dumps(createSystemJSON(this_System), indent=4)
 
 
     systemJSON = json.dumps(createSystemJSON(this_System), indent=4)
