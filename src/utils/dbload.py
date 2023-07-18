@@ -12,6 +12,32 @@ db.truncate()
 
 # Main sequence stars
 
+# Type O
+
+db.insert({'starClass': 'V', 'starType': 'O', 'starSubType': 0, 'baseMass': 90.0, 'baseTemp': 50000, 'diameter': 20.0})
+db.insert({'starClass': 'V', 'starType': 'O', 'starSubType': 1, 'baseMass': 84.0, 'baseTemp': 48000, 'diameter': 18.4})
+db.insert({'starClass': 'V', 'starType': 'O', 'starSubType': 2, 'baseMass': 78.0, 'baseTemp': 46000, 'diameter': 16.8})
+db.insert({'starClass': 'V', 'starType': 'O', 'starSubType': 3, 'baseMass': 72.0, 'baseTemp': 44000, 'diameter': 15.2})
+db.insert({'starClass': 'V', 'starType': 'O', 'starSubType': 4, 'baseMass': 66.0, 'baseTemp': 42000, 'diameter': 13.6})
+db.insert({'starClass': 'V', 'starType': 'O', 'starSubType': 5, 'baseMass': 60.0, 'baseTemp': 40000, 'diameter': 12.0})
+db.insert({'starClass': 'V', 'starType': 'O', 'starSubType': 6, 'baseMass': 51.6, 'baseTemp': 38000, 'diameter': 3.24})
+db.insert({'starClass': 'V', 'starType': 'O', 'starSubType': 7, 'baseMass': 43.2, 'baseTemp': 36000, 'diameter': 2.98})
+db.insert({'starClass': 'V', 'starType': 'O', 'starSubType': 8, 'baseMass': 34.8, 'baseTemp': 34000, 'diameter': 2.72})
+db.insert({'starClass': 'V', 'starType': 'O', 'starSubType': 9, 'baseMass': 25.4, 'baseTemp': 32000, 'diameter': 2.46})
+
+# Type B
+
+db.insert({'starClass': 'V', 'starType': 'B', 'starSubType': 0, 'baseMass': 18.0, 'baseTemp': 30000, 'diameter': 7.00})
+db.insert({'starClass': 'V', 'starType': 'B', 'starSubType': 1, 'baseMass': 15.4, 'baseTemp': 27000, 'diameter': 6.30})
+db.insert({'starClass': 'V', 'starType': 'B', 'starSubType': 2, 'baseMass': 12.8, 'baseTemp': 24000, 'diameter': 5.60})
+db.insert({'starClass': 'V', 'starType': 'B', 'starSubType': 3, 'baseMass': 10.2, 'baseTemp': 21000, 'diameter': 4.90})
+db.insert({'starClass': 'V', 'starType': 'B', 'starSubType': 4, 'baseMass': 7.60, 'baseTemp': 18000, 'diameter': 4.20})
+db.insert({'starClass': 'V', 'starType': 'B', 'starSubType': 5, 'baseMass': 5.00, 'baseTemp': 15000, 'diameter': 3.50})
+db.insert({'starClass': 'V', 'starType': 'B', 'starSubType': 6, 'baseMass': 4.44, 'baseTemp': 14000, 'diameter': 3.24})
+db.insert({'starClass': 'V', 'starType': 'B', 'starSubType': 7, 'baseMass': 3.88, 'baseTemp': 13000, 'diameter': 2.98})
+db.insert({'starClass': 'V', 'starType': 'B', 'starSubType': 8, 'baseMass': 3.32, 'baseTemp': 12000, 'diameter': 2.72})
+db.insert({'starClass': 'V', 'starType': 'B', 'starSubType': 9, 'baseMass': 2.76, 'baseTemp': 11000, 'diameter': 2.46})
+
 # Type A
 
 db.insert({'starClass': 'V', 'starType': 'A', 'starSubType': 0, 'baseMass': 2.20, 'baseTemp': 10000, 'diameter': 2.20})

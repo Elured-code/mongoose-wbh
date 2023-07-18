@@ -21,6 +21,8 @@ class Star:
             self.starDiameter = 0
 
     # Class properties go here
+    # Using properties to leave open the possibility of verifying and modifying
+    # values as they are set
 
     @property
     def starName(self):
@@ -55,6 +57,15 @@ class Star:
         self.__starMass = starMass
 
     @property
+    def starMassVariance(self):
+        return self.__starMassVariance
+    
+    @starMassVariance.setter
+    def starMassVariance(self, starMassVariance):
+        self.__starMassVariance = starMassVariance
+
+
+    @property
     def starTemp(self):
         return self.__starTemp
     
@@ -69,6 +80,16 @@ class Star:
     @starDiameter.setter
     def starDiameter(self, starDiameter):
         self.__starDiameter = starDiameter
+
+    @property
+    def starLuminosity(self):
+        return self.__starLuminosity
+    
+    @starLuminosity.setter
+    def starLuminosity(self, starLuminosity):
+        self.__starLuminosity = starLuminosity
+
+    
     
     # Determine the star type
     # MGT2 WBH pp15-16
@@ -183,13 +204,13 @@ class Star:
             # of the base mass, so about 99.5% of values will fall within 
             # the 20% value
 
-            mass = numpy.random.normal(r['baseMass'], r['baseMass'] * 0.07, 1) 
-
             # Because numpy.random can return multiple values, select the first
             # (of one in this case)
             # Round the result to 3 decimals and return
 
-            self.starMass = round(mass[0], 3)
+            mass = numpy.random.normal(r['baseMass'], r['baseMass'] * 0.07, 1)[0]
+            self.starMassVariance = mass/r['baseMass'] 
+            self.starMass = round(mass, 3)
 
     # Generate the star surface temperature
         
@@ -224,6 +245,19 @@ class Star:
 
             r = r[0]
             self.starDiameter = r['diameter']
+
+    # Generate star luminosity
+
+    def genStarLuminosity(self):
+        self.starLuminosity = \
+            (self.starDiameter ** 2) * (self.starTemp/5800) ** 4
+        
+        # Apply the mass variance to luminosity
+
+        self.starLuminosity = round((self.starLuminosity * self.starMassVariance), 3)
+
+        
+
 
     # The methods below determine class, type and subtypes
     #
@@ -443,6 +477,7 @@ class Star:
         self.genStarMass()
         self.genStarTemp()
         self.genStarDiameter()
+        self.genStarLuminosity()
 
         # Debugging code to catch non-typed stars
 
@@ -452,6 +487,8 @@ if __name__ == '__main__':
     thisStar = Star()
     thisStar.genStar(0, False, True)
 
-    print(thisStar.starMass) 
-    print(thisStar.starTemp)  
-    print(thisStar.starDiameter)   
+    print('Mass', thisStar.starMass) 
+    print('Variance', thisStar.starMassVariance)
+    print('Temperature', thisStar.starTemp)  
+    print('Diameter', thisStar.starDiameter)
+    print('Luminosity', thisStar.starLuminosity)   
