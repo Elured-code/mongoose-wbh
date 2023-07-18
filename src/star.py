@@ -18,6 +18,9 @@ class Star:
             self.starSubType = ''
             self.starClass = ''
             self.starMass = 0
+            self.starDiameter = 0
+
+    # Class properties go here
 
     @property
     def starName(self):
@@ -58,6 +61,14 @@ class Star:
     @starTemp.setter
     def starTemp(self, starTemp):
         self.__starTemp = starTemp
+    
+    @property
+    def starDiameter(self):
+        return self.__starDiameter
+    
+    @starDiameter.setter
+    def starDiameter(self, starDiameter):
+        self.__starDiameter = starDiameter
     
     # Determine the star type
     # MGT2 WBH pp15-16
@@ -151,6 +162,8 @@ class Star:
         logger.debug('Star subtype is %s', self.starSubType)
         logger.debug('Star class is %s', self.starClass)
 
+    # Generate the star mass
+
     def genStarMass(self):
 
             # Build a query from the star class, type and subtype
@@ -178,8 +191,7 @@ class Star:
 
             self.starMass = round(mass[0], 3)
 
-
-
+    # Generate the star surface temperature
         
     def genStarTemp(self):
             
@@ -195,20 +207,25 @@ class Star:
 
             r = r[0]
             self.starTemp = r['baseTemp']
+
+    # Generate the star diameter
+
+    def genStarDiameter(self):
             
-    # Generate the star, calling the previous object methods to determine
-    # stellar characteristics
-    #
-    
-    def genStar(self, dm, includeUnusual, isPrimary):
-        self.genStarType(dm, includeUnusual, isPrimary)
-        self.genStarMass()
-        self.genStarTemp()
+            # Build a query from the star class, type and subtype
 
-        # Debugging code to catch non-typed stars
+            db = TinyDB('db.json')
+            q = Query()
+            r = db.search((q.starClass == self.starClass) \
+                        & (q.starType == self.starType) \
+                        & (q.starSubType == self.starSubType))
+            
+            # There shouldn't be duplicates, but only accept the first result
 
-        if self.starType == '': input("Press Enter to continue...")
+            r = r[0]
+            self.starDiameter = r['diameter']
 
+    # The methods below determine class, type and subtypes
     #
     # Generate a main sequence star
     #
@@ -417,11 +434,24 @@ class Star:
 
         return sClass, sType, sSubType 
 
+    # Generate the star, calling the previous object methods to determine
+    # stellar characteristics
+    #
     
+    def genStar(self, dm, includeUnusual, isPrimary):
+        self.genStarType(dm, includeUnusual, isPrimary)
+        self.genStarMass()
+        self.genStarTemp()
+        self.genStarDiameter()
+
+        # Debugging code to catch non-typed stars
+
+        if self.starType == '': input("Press Enter to continue...")   
 
 if __name__ == '__main__':
     thisStar = Star()
     thisStar.genStar(0, False, True)
 
     print(thisStar.starMass) 
-    print(thisStar.starTemp)     
+    print(thisStar.starTemp)  
+    print(thisStar.starDiameter)   
