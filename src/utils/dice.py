@@ -7,6 +7,10 @@ import random
 # Dice rollers
 
 
+def D3Roll():
+    random.seed()
+    return random.randint(1, 3)
+
 def D6Rollx2():
     random.seed()
     return random.randint(1, 6) + random.randint(1, 6)

@@ -89,7 +89,13 @@ class Star:
     def starLuminosity(self, starLuminosity):
         self.__starLuminosity = starLuminosity
 
+    @property
+    def starAge(self):
+        return self.__starAge
     
+    @starAge.setter
+    def starAge(self, starAge):
+        self.__starAge = starAge
     
     # Determine the star type
     # MGT2 WBH pp15-16
@@ -256,8 +262,41 @@ class Star:
 
         self.starLuminosity = round((self.starLuminosity * self.starMassVariance), 3)
 
-        
+    # Generate the star/system age
 
+    def genStarAge(self):
+
+        # Handle main sequence stars first
+
+        if self.starClass == 'V':
+            
+            # First determine the star lifespan
+
+            msLifeSpan = round(10 / (self.starMass ** 2.5), 1)
+            print('Life Span:  ', msLifeSpan)
+
+            # Determine age for small main sequence stars
+            # (mass <= 0.9)
+
+            if self.starMass <= 0.9:
+                age = (dice.D6Roll() * 2) + (dice.D3Roll() - 2) + \
+                    (dice.D10Roll() / 10) + (dice.D10Roll() / 100)
+
+                # Using the WBH assumption that star formation began around
+                # 12 billion years ago, cap the age at 12
+
+                if age > 12: age = 12.0
+                age = round(age, 2)
+
+            # Determine age for larger main sequence stars
+
+            else:
+                age = round((msLifeSpan * (dice.D100Roll() / 100)), 2)
+
+        else:
+            pass
+
+        self.starAge = age
 
     # The methods below determine class, type and subtypes
     #
@@ -478,6 +517,7 @@ class Star:
         self.genStarTemp()
         self.genStarDiameter()
         self.genStarLuminosity()
+        self.genStarAge()
 
         # Debugging code to catch non-typed stars
 
