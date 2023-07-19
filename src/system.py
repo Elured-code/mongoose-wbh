@@ -58,6 +58,7 @@ def createSystemJSON(System):
             starJSON['Stellar Diameter'] = star.starDiameter
             starJSON['Stellar Luminosity'] = star.starLuminosity
             starJSON['Stellar Age'] = star.starAge
+            starJSON['Stellar Colour'] = star.starColour
             
             starsJSON.append(starJSON)
             

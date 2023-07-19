@@ -96,6 +96,14 @@ class Star:
     @starAge.setter
     def starAge(self, starAge):
         self.__starAge = starAge
+
+    @property
+    def starColour(self):
+        return self.__starColour
+    
+    @starColour.setter
+    def starColour(self, starColour):
+        self.__starColour = starColour
     
     # Determine the star type
     # MGT2 WBH pp15-16
@@ -297,6 +305,15 @@ class Star:
             pass
 
         self.starAge = age
+
+    # Get the star colour
+
+    def genStarColour(self):
+        db = TinyDB('db.json')
+        q = Query()
+        r = db.search((q.starType == self.starType))
+        r = r[0]
+        self.starColour = r['starColour']
 
     # The methods below determine class, type and subtypes
     #
@@ -518,6 +535,7 @@ class Star:
         self.genStarDiameter()
         self.genStarLuminosity()
         self.genStarAge()
+        self.genStarColour()
 
         # Debugging code to catch non-typed stars
 
