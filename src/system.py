@@ -15,7 +15,7 @@ formatter = logging.Formatter('%(asctime)s %(name)s [%(funcName)-12s\t] \
                               '%d/%m/%Y %I:%M:%S %p')
 handler.setFormatter(formatter)
 logger.addHandler(handler)
-logger.setLevel(logging.WARNING)
+logger.setLevel(logging.DEBUG)
 
 # Create a JSON object containing the system data
 

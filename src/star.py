@@ -200,6 +200,7 @@ class Star:
     # Generate the star mass
 
     def genStarMass(self):
+            logger.debug('Determining star mass')
 
             # Build a query from the star class, type and subtype
 
@@ -225,10 +226,12 @@ class Star:
             mass = numpy.random.normal(r['baseMass'], r['baseMass'] * 0.07, 1)[0]
             self.starMassVariance = mass/r['baseMass'] 
             self.starMass = round(mass, 3)
+            logger.debug('Star mass is %s solar masses', self.starMass)
 
     # Generate the star surface temperature
         
     def genStarTemp(self):
+            logger.debug('Determining star surface temperature')
             
             # Build a query from the star class, type and subtype
 
@@ -242,10 +245,12 @@ class Star:
 
             r = r[0]
             self.starTemp = r['baseTemp']
+            logger.debug('Star surface temperature is %sK', self.starTemp)
 
     # Generate the star diameter
 
     def genStarDiameter(self):
+            logger.debug('Calculating star diameter')
             
             # Build a query from the star class, type and subtype
 
@@ -259,34 +264,40 @@ class Star:
 
             r = r[0]
             self.starDiameter = r['diameter']
+            logger.debug('Star diameter is %s solar diameters', self.starDiameter)
 
     # Generate star luminosity
 
     def genStarLuminosity(self):
+        logger.debug('Calculating star luminosity')
         self.starLuminosity = \
             (self.starDiameter ** 2) * (self.starTemp/5800) ** 4
         
         # Apply the mass variance to luminosity
 
         self.starLuminosity = round((self.starLuminosity * self.starMassVariance), 3)
+        logger.debug('Star luminosity is %s x solar luminosity', self.starLuminosity)
 
     # Generate the star/system age
 
     def genStarAge(self):
+        logger.debug('Calculating star age')
 
         # Handle main sequence stars first
 
         if self.starClass == 'V':
+            logger.debug('Determining main sequence star age')
             
             # First determine the star lifespan
 
             msLifeSpan = round(10 / (self.starMass ** 2.5), 1)
-            print('Life Span:  ', msLifeSpan)
+            logger.debug('Main sequence star life span is %s Gy', msLifeSpan)
 
             # Determine age for small main sequence stars
             # (mass <= 0.9)
 
             if self.starMass <= 0.9:
+                logger.debug ('Determining age of small main sequence star')
                 age = (dice.D6Roll() * 2) + (dice.D3Roll() - 2) + \
                     (dice.D10Roll() / 10) + (dice.D10Roll() / 100)
 
@@ -299,21 +310,25 @@ class Star:
             # Determine age for larger main sequence stars
 
             else:
+                logger.debug('Determining age of large main sequence star')
                 age = round((msLifeSpan * (dice.D100Roll() / 100)), 2)
 
         else:
             pass
 
         self.starAge = age
+        logger.debug('Star age is %s Gy', self.starAge)
 
     # Get the star colour
 
     def genStarColour(self):
+        logger.debug('Determining star colour')
         db = TinyDB('db.json')
         q = Query()
         r = db.search((q.starType == self.starType))
         r = r[0]
         self.starColour = r['starColour']
+        logger.debug('Star colour is %s', self.starColour)
 
     # The methods below determine class, type and subtypes
     #
