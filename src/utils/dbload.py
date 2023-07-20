@@ -28,6 +28,58 @@ db.insert({'starClass': 'Ia', 'starType': 'O', 'starSubType': 9, 'baseMass': 60.
 
 # Giants (Luminosity Class III)
 
+# Type O
+
+db.insert({'starClass': 'III', 'starType': 'O', 'starSubType': 0, 'baseMass': 110.0, 'baseTemp': 50000, 'diameter': 21.0})
+db.insert({'starClass': 'III', 'starType': 'O', 'starSubType': 1, 'baseMass': 94.0, 'baseTemp': 48000, 'diameter': 19.8})
+db.insert({'starClass': 'III', 'starType': 'O', 'starSubType': 2, 'baseMass': 78.0, 'baseTemp': 46000, 'diameter': 18.6})
+db.insert({'starClass': 'III', 'starType': 'O', 'starSubType': 3, 'baseMass': 62.0, 'baseTemp': 44000, 'diameter': 17.4})
+db.insert({'starClass': 'III', 'starType': 'O', 'starSubType': 4, 'baseMass': 46.0, 'baseTemp': 42000, 'diameter': 16.2})
+db.insert({'starClass': 'III', 'starType': 'O', 'starSubType': 5, 'baseMass': 30.0, 'baseTemp': 40000, 'diameter': 15.0})
+db.insert({'starClass': 'III', 'starType': 'O', 'starSubType': 6, 'baseMass': 28.0, 'baseTemp': 38000, 'diameter': 14.0})
+db.insert({'starClass': 'III', 'starType': 'O', 'starSubType': 7, 'baseMass': 26.0, 'baseTemp': 36000, 'diameter': 13.0})
+db.insert({'starClass': 'III', 'starType': 'O', 'starSubType': 8, 'baseMass': 24.0, 'baseTemp': 34000, 'diameter': 12.0})
+db.insert({'starClass': 'III', 'starType': 'O', 'starSubType': 9, 'baseMass': 22.0, 'baseTemp': 32000, 'diameter': 11.0})
+
+# Type B
+
+db.insert({'starClass': 'III', 'starType': 'B', 'starSubType': 0, 'baseMass': 20.0, 'baseTemp': 30000, 'diameter': 10.0})
+db.insert({'starClass': 'III', 'starType': 'B', 'starSubType': 1, 'baseMass': 18.0, 'baseTemp': 27000, 'diameter': 9.20})
+db.insert({'starClass': 'III', 'starType': 'B', 'starSubType': 2, 'baseMass': 16.0, 'baseTemp': 24000, 'diameter': 8.40})
+db.insert({'starClass': 'III', 'starType': 'B', 'starSubType': 3, 'baseMass': 14.0, 'baseTemp': 21000, 'diameter': 7.60})
+db.insert({'starClass': 'III', 'starType': 'B', 'starSubType': 4, 'baseMass': 12.0, 'baseTemp': 18000, 'diameter': 6.80})
+db.insert({'starClass': 'III', 'starType': 'B', 'starSubType': 5, 'baseMass': 10.0, 'baseTemp': 15000, 'diameter': 6.00})
+db.insert({'starClass': 'III', 'starType': 'B', 'starSubType': 6, 'baseMass': 9.60, 'baseTemp': 14000, 'diameter': 5.80})
+db.insert({'starClass': 'III', 'starType': 'B', 'starSubType': 7, 'baseMass': 9.20, 'baseTemp': 13000, 'diameter': 5.60})
+db.insert({'starClass': 'III', 'starType': 'B', 'starSubType': 8, 'baseMass': 8.80, 'baseTemp': 12000, 'diameter': 5.40})
+db.insert({'starClass': 'III', 'starType': 'B', 'starSubType': 9, 'baseMass': 8.40, 'baseTemp': 10000, 'diameter': 5.20})
+
+# Type A
+
+db.insert({'starClass': 'III', 'starType': 'A', 'starSubType': 0, 'baseMass': 8.00, 'baseTemp': 10000, 'diameter': 5.00})
+db.insert({'starClass': 'III', 'starType': 'A', 'starSubType': 1, 'baseMass': 7.60, 'baseTemp': 9600, 'diameter': 5.00})
+db.insert({'starClass': 'III', 'starType': 'A', 'starSubType': 2, 'baseMass': 7.20, 'baseTemp': 9200, 'diameter': 5.00})
+db.insert({'starClass': 'III', 'starType': 'A', 'starSubType': 3, 'baseMass': 6.80, 'baseTemp': 8800, 'diameter': 5.00})
+db.insert({'starClass': 'III', 'starType': 'A', 'starSubType': 4, 'baseMass': 6.40, 'baseTemp': 8400, 'diameter': 5.00})
+db.insert({'starClass': 'III', 'starType': 'A', 'starSubType': 5, 'baseMass': 6.00, 'baseTemp': 8000, 'diameter': 5.00})
+db.insert({'starClass': 'III', 'starType': 'A', 'starSubType': 6, 'baseMass': 5.60, 'baseTemp': 7600, 'diameter': 5.00})
+db.insert({'starClass': 'III', 'starType': 'A', 'starSubType': 7, 'baseMass': 5.20, 'baseTemp': 7200, 'diameter': 5.00})
+db.insert({'starClass': 'III', 'starType': 'A', 'starSubType': 8, 'baseMass': 4.80, 'baseTemp': 6800, 'diameter': 5.00})
+db.insert({'starClass': 'III', 'starType': 'A', 'starSubType': 9, 'baseMass': 4.40, 'baseTemp': 6400, 'diameter': 5.00})
+
+# Type F
+
+db.insert({'starClass': 'III', 'starType': 'F', 'starSubType': 0, 'baseMass': 4.00, 'baseTemp': 7500, 'diameter': 1.70})
+db.insert({'starClass': 'III', 'starType': 'F', 'starSubType': 1, 'baseMass': 3.80, 'baseTemp': 7300, 'diameter': 1.66})
+db.insert({'starClass': 'III', 'starType': 'F', 'starSubType': 2, 'baseMass': 3.60, 'baseTemp': 7100, 'diameter': 1.62})
+db.insert({'starClass': 'III', 'starType': 'F', 'starSubType': 3, 'baseMass': 3.40, 'baseTemp': 6900, 'diameter': 1.58})
+db.insert({'starClass': 'III', 'starType': 'F', 'starSubType': 4, 'baseMass': 3.20, 'baseTemp': 6700, 'diameter': 1.54})
+db.insert({'starClass': 'III', 'starType': 'F', 'starSubType': 5, 'baseMass': 3.00, 'baseTemp': 6500, 'diameter': 1.50})
+db.insert({'starClass': 'III', 'starType': 'F', 'starSubType': 6, 'baseMass': 2.90, 'baseTemp': 6400, 'diameter': 1.42})
+db.insert({'starClass': 'III', 'starType': 'F', 'starSubType': 7, 'baseMass': 2.80, 'baseTemp': 6300, 'diameter': 1.34})
+db.insert({'starClass': 'III', 'starType': 'F', 'starSubType': 8, 'baseMass': 2.70, 'baseTemp': 6200, 'diameter': 1.26})
+db.insert({'starClass': 'III', 'starType': 'F', 'starSubType': 9, 'baseMass': 2.60, 'baseTemp': 6100, 'diameter': 1.18})
+
 # Subgiants (Luminosity Class IV)
 
 # Type B
@@ -187,6 +239,33 @@ db.insert({'starClass': 'V', 'starType': 'M', 'starSubType': 9, 'baseMass': 0.08
 
 # Subdwarf stars (Luminosity class VI)
 
+# Type O
+
+db.insert({'starClass': 'VI', 'starType': 'O', 'starSubType': 0, 'baseMass': 2.00, 'baseTemp': 50000, 'diameter': 0.18})
+db.insert({'starClass': 'VI', 'starType': 'O', 'starSubType': 1, 'baseMass': 1.90, 'baseTemp': 48000, 'diameter': 0.18})
+db.insert({'starClass': 'VI', 'starType': 'O', 'starSubType': 2, 'baseMass': 1.80, 'baseTemp': 46000, 'diameter': 0.18})
+db.insert({'starClass': 'VI', 'starType': 'O', 'starSubType': 3, 'baseMass': 1.70, 'baseTemp': 44000, 'diameter': 0.18})
+db.insert({'starClass': 'VI', 'starType': 'O', 'starSubType': 4, 'baseMass': 1.60, 'baseTemp': 42000, 'diameter': 0.18})
+db.insert({'starClass': 'VI', 'starType': 'O', 'starSubType': 5, 'baseMass': 1.50, 'baseTemp': 40000, 'diameter': 0.18})
+db.insert({'starClass': 'VI', 'starType': 'O', 'starSubType': 6, 'baseMass': 1.30, 'baseTemp': 38000, 'diameter': 0.18})
+db.insert({'starClass': 'VI', 'starType': 'O', 'starSubType': 7, 'baseMass': 1.10, 'baseTemp': 36000, 'diameter': 0.19})
+db.insert({'starClass': 'VI', 'starType': 'O', 'starSubType': 8, 'baseMass': 0.90, 'baseTemp': 34000, 'diameter': 0.19})
+db.insert({'starClass': 'VI', 'starType': 'O', 'starSubType': 9, 'baseMass': 0.70, 'baseTemp': 32000, 'diameter': 0.19})
+
+# Type B
+
+db.insert({'starClass': 'VI', 'starType': 'B', 'starSubType': 0, 'baseMass': 0.50, 'baseTemp': 30000, 'diameter': 0.20})
+db.insert({'starClass': 'VI', 'starType': 'B', 'starSubType': 1, 'baseMass': 0.48, 'baseTemp': 27000, 'diameter': 0.26})
+db.insert({'starClass': 'VI', 'starType': 'B', 'starSubType': 2, 'baseMass': 0.46, 'baseTemp': 24000, 'diameter': 0.32})
+db.insert({'starClass': 'VI', 'starType': 'B', 'starSubType': 3, 'baseMass': 0.44, 'baseTemp': 21000, 'diameter': 0.38})
+db.insert({'starClass': 'VI', 'starType': 'B', 'starSubType': 4, 'baseMass': 0.42, 'baseTemp': 18000, 'diameter': 0.44})
+db.insert({'starClass': 'VI', 'starType': 'B', 'starSubType': 5, 'baseMass': 0.40, 'baseTemp': 15000, 'diameter': 0.50})
+db.insert({'starClass': 'VI', 'starType': 'B', 'starSubType': 6, 'baseMass': 0.38, 'baseTemp': 14000, 'diameter': 0.56})
+db.insert({'starClass': 'VI', 'starType': 'B', 'starSubType': 7, 'baseMass': 0.36, 'baseTemp': 13000, 'diameter': 0.62})
+db.insert({'starClass': 'VI', 'starType': 'B', 'starSubType': 8, 'baseMass': 0.34, 'baseTemp': 12000, 'diameter': 0.68})
+db.insert({'starClass': 'VI', 'starType': 'B', 'starSubType': 9, 'baseMass': 0.32, 'baseTemp': 11000, 'diameter': 0.74})
+
+
 # Dwarf stars (Luminosity class D)
 
 # Add star colours
@@ -199,11 +278,5 @@ db.update({'starColour': 'Yellow-White'}, sO.starType == 'F')
 db.update({'starColour': 'Yellow'}, sO.starType == 'G')
 db.update({'starColour': 'Light Orange'}, sO.starType == 'K')
 db.update({'starColour': 'Orange-Red'}, sO.starType == 'M')
-
-
-
-
-
-
 
 print('Loaded ' + str(len(db)) + ' items.')
