@@ -165,3 +165,6 @@ vscode/settings.json
 
 
 src/scratch.py
+src/.DS_Store
+
+.DS_Store
