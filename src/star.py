@@ -313,8 +313,33 @@ class Star:
                 logger.debug('Determining age of large main sequence star')
                 age = round((msLifeSpan * (dice.D100Roll() / 100)), 2)
 
+        # Subgiant (Class VI) stars
+
+        elif self.starClass == 'IV':
+
+            # First get the lifespan of the star in the main sequence
+
+            msLifeSpan = round(10 / (self.starMass ** 2.5), 1)
+            logger.debug('Main sequence star life span is %s Gy', msLifeSpan)
+
+            # Now get the lifespan of the star as a subgiant
+
+            logger.debug('Determining age for subgiant star')
+            sgLifeSpan = round(msLifeSpan/(4 + self.starMass), 1)
+            logger.debug('Subgiant life span is %s Gy', sgLifeSpan)
+
+            # Determine the stars position in its life as a subgiant
+
+            age = msLifeSpan + (sgLifeSpan * (dice.D100Roll() / 100))
+            age = round(age, 1)
+            
+            
+
         else:
-            pass
+
+            # Placeholder to avoid crashes where i havent finished code
+
+            age = 0
 
         self.starAge = age
         logger.debug('Star age is %s Gy', self.starAge)
