@@ -1,8 +1,8 @@
 import logging
 import numpy
 from tinydb import TinyDB, Query
-import utils.dice as dice
-import utils.tables as tables
+import src.utils.dice as dice
+import src.utils.tables as tables
 
 # Get the logging context from the calling module
 

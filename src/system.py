@@ -4,7 +4,7 @@
 
 import json
 import logging
-import star
+import src.star as star
 
 # Configure logging
 
