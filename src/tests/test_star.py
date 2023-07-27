@@ -2,7 +2,7 @@
 # from _pytest.python_api import ApproxMapping
 import pytest
 
-from src import star
+from .star import Star
 
 @pytest.fixture
 def new_Star():
