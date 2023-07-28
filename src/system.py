@@ -118,7 +118,10 @@ if __name__ == '__main__':
         
         i = 0
         for star in a_System.Stars:
-            print('System %s \tIndex %s: \t%s%s %s \tAge %s' % (j+1, i, star.starType, star.starSubType, star.starClass, star.starAge))
+            if star.starClass == 'VI':
+                print('System %s \tIndex %s: \t%s%s %s \tAge %s' % \
+                (j+1, i, star.starType, star.starSubType, star.starClass, \
+                star.starAge))
             i += 1
         j += 1
 

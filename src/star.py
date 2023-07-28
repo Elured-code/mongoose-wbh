@@ -283,9 +283,11 @@ class Star:
     def genStarAge(self):
         logger.debug('Calculating star age')
 
-        # Handle main sequence stars first
+        # Handle main sequence (Class V) stars first
+        # Note that this includes sbudward (Class VI) stars until I
+        # get clarification otherwise
 
-        if self.starClass == 'V':
+        if self.starClass in ['V', 'VI']:
             logger.debug('Determining main sequence star age')
             
             # First determine the star lifespan
@@ -313,7 +315,7 @@ class Star:
                 logger.debug('Determining age of large main sequence star')
                 age = round((msLifeSpan * (dice.D100Roll() / 100)), 2)
 
-        # Subgiant (Class VI) stars
+        # Subgiant (Class IV) stars
 
         elif self.starClass == 'IV':
 
@@ -333,8 +335,7 @@ class Star:
             age = msLifeSpan + (sgLifeSpan * (dice.D100Roll() / 100))
             age = round(age, 1)
             
-            
-
+        
         else:
 
             # Placeholder to avoid crashes where i havent finished code
