@@ -1,10 +1,18 @@
-
-
-# Imports
+# Import external modules
 
 import json
 import logging
-import src.star as star
+import os
+import sys
+
+# Set the Python path to allow module discovery
+
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+sys.path.append(os.path.dirname(SCRIPT_DIR))
+
+# Import local modules
+
+import star as star
 
 # Configure logging
 

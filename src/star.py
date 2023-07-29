@@ -1,6 +1,18 @@
+# Import external modules
+
 import logging
 import numpy
+import sys
+import os
 from tinydb import TinyDB, Query
+
+# Set the Python path to allow module discovery
+
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+sys.path.append(os.path.dirname(SCRIPT_DIR))
+
+# Import local modules
+
 import src.utils.dice as dice
 import src.utils.tables as tables
 

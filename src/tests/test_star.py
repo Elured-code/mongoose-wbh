@@ -1,11 +1,11 @@
 # from os import popen
 # from _pytest.python_api import ApproxMapping
 import pytest
-import os.path
+import os
 import sys
 
-sys.path.append('../src')
-print(sys.path)
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+sys.path.append(os.path.dirname(SCRIPT_DIR))
 
 from src.star import Star
 
