@@ -11,10 +11,5 @@ from src.star import Star
 
 @pytest.fixture
 def new_Star():
-    ''' Returns a newly initialised World object '''
+    ''' Returns a newly initialised star object '''
     return Star('Test')
-
-''' Test atmosphere for siz = 0 '''
-
-def test1():
-    assert 1 > 0
