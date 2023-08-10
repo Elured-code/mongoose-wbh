@@ -369,15 +369,15 @@ db.insert({'starClass': 'III', 'starType': 'K', 'starSubType': 9, 'baseMass': 1.
 # Type M
 
 db.insert({'starClass': 'III', 'starType': 'M', 'starSubType': 0, 'baseMass': 1.80, 'baseTemp': 3700, 'diameter': 60.0})
-db.insert({'starClass': 'III', 'starType': 'M', 'starSubType': 1, 'baseMass': 0.43, 'baseTemp': 3560, 'diameter': 68.0})
-db.insert({'starClass': 'III', 'starType': 'M', 'starSubType': 2, 'baseMass': 0.37, 'baseTemp': 3420, 'diameter': 76.0})
-db.insert({'starClass': 'III', 'starType': 'M', 'starSubType': 3, 'baseMass': 0.30, 'baseTemp': 3280, 'diameter': 84.0})
-db.insert({'starClass': 'III', 'starType': 'M', 'starSubType': 4, 'baseMass': 0.23, 'baseTemp': 3140, 'diameter': 92.0})
-db.insert({'starClass': 'III', 'starType': 'M', 'starSubType': 5, 'baseMass': 0.16, 'baseTemp': 3000, 'diameter': 100})
-db.insert({'starClass': 'III', 'starType': 'M', 'starSubType': 6, 'baseMass': 0.14, 'baseTemp': 2850, 'diameter': 125})
-db.insert({'starClass': 'III', 'starType': 'M', 'starSubType': 7, 'baseMass': 0.12, 'baseTemp': 2700, 'diameter': 150})
-db.insert({'starClass': 'III', 'starType': 'M', 'starSubType': 8, 'baseMass': 0.10, 'baseTemp': 2550, 'diameter': 175})
-db.insert({'starClass': 'III', 'starType': 'M', 'starSubType': 9, 'baseMass': 0.08, 'baseTemp': 2400, 'diameter': 200})
+db.insert({'starClass': 'III', 'starType': 'M', 'starSubType': 1, 'baseMass': 1.92, 'baseTemp': 3560, 'diameter': 68.0})
+db.insert({'starClass': 'III', 'starType': 'M', 'starSubType': 2, 'baseMass': 2.04, 'baseTemp': 3420, 'diameter': 76.0})
+db.insert({'starClass': 'III', 'starType': 'M', 'starSubType': 3, 'baseMass': 2.16, 'baseTemp': 3280, 'diameter': 84.0})
+db.insert({'starClass': 'III', 'starType': 'M', 'starSubType': 4, 'baseMass': 2.28, 'baseTemp': 3140, 'diameter': 92.0})
+db.insert({'starClass': 'III', 'starType': 'M', 'starSubType': 5, 'baseMass': 2.40, 'baseTemp': 3000, 'diameter': 100})
+db.insert({'starClass': 'III', 'starType': 'M', 'starSubType': 6, 'baseMass': 3.80, 'baseTemp': 2850, 'diameter': 125})
+db.insert({'starClass': 'III', 'starType': 'M', 'starSubType': 7, 'baseMass': 5.20, 'baseTemp': 2700, 'diameter': 150})
+db.insert({'starClass': 'III', 'starType': 'M', 'starSubType': 8, 'baseMass': 6.60, 'baseTemp': 2550, 'diameter': 175})
+db.insert({'starClass': 'III', 'starType': 'M', 'starSubType': 9, 'baseMass': 8.00, 'baseTemp': 2400, 'diameter': 200})
 
 
 # Subgiants (Luminosity Class IV)

@@ -344,7 +344,33 @@ class Star:
             age = msLifeSpan + (sgLifeSpan * (dice.D100Roll() / 100))
             age = round(age, 1)
             
-        
+        # Giant (Class III) stars
+
+        elif self.starClass == 'III':
+
+            # First get the lifespan of the star in the main sequence
+
+            msLifeSpan = round(10 / (self.starMass ** 2.5), 1)
+            logger.debug('Main sequence star life span is %s Gy', msLifeSpan)
+
+            # Then calculate the subgiant life span
+
+            sgLifeSpan = round(msLifeSpan/(4 + self.starMass), 1)
+            logger.debug('Subgiant life span is %s Gy', sgLifeSpan)            
+            
+            # Now calculate the lifespan of the star as a giant
+
+            gLifeSpan = round(msLifeSpan / (10 * self.starMass ** 3), 1)
+            logger.debug('Giant lifespan is %s Gy', gLifeSpan)   
+
+            # Getting the variance value (place in giant lifespan)
+
+            variance = (gLifeSpan * (dice.D1000Roll() / 100))
+
+            # Finally calculate the star age from previous values
+
+            age = round(msLifeSpan + sgLifeSpan + variance, 1)
+
         else:
 
             # Placeholder to avoid crashes where i havent finished code
