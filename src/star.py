@@ -295,16 +295,15 @@ class Star:
     def genStarAge(self):
         logger.debug('Calculating star age')
 
-        # Handle main sequence (Class V) stars first
-        # Note that this includes sbudward (Class VI) stars until I
-        # get clarification otherwise
+        # Handle non-post-main sequence stars first
+        # This includes class Ia, Ib, II and VI
 
-        if self.starClass in ['V', 'VI']:
+        if self.starClass in ['Ia', 'Ib', 'II', 'V', 'VI']:
             logger.debug('Determining main sequence star age')
             
             # First determine the star lifespan
 
-            msLifeSpan = round(10 / (self.starMass ** 2.5), 1)
+            msLifeSpan = round(10 / (self.starMass ** 2.5), 3)
             logger.debug('Main sequence star life span is %s Gy', msLifeSpan)
 
             # Determine age for small main sequence stars
@@ -319,10 +318,7 @@ class Star:
 
             else:
                 logger.debug('Determining age of large main sequence star')
-                age = round((msLifeSpan * (dice.D100Roll() / 100)), 2)
-
-            # Put a lower bound on the age to allow for protostars later
-            if age <= 0.1: age = 0.1
+                age = round((msLifeSpan * (dice.D100Roll() / 100)), 3)
 
         # Subgiant (Class IV) stars
 
@@ -330,19 +326,19 @@ class Star:
 
             # First get the lifespan of the star in the main sequence
 
-            msLifeSpan = round(10 / (self.starMass ** 2.5), 1)
+            msLifeSpan = round(10 / (self.starMass ** 2.5), 3)
             logger.debug('Main sequence star life span is %s Gy', msLifeSpan)
 
             # Now get the lifespan of the star as a subgiant
 
             logger.debug('Determining age for subgiant star')
-            sgLifeSpan = round(msLifeSpan/(4 + self.starMass), 1)
+            sgLifeSpan = round(msLifeSpan/(4 + self.starMass), 3)
             logger.debug('Subgiant life span is %s Gy', sgLifeSpan)
 
             # Determine the stars position in its life as a subgiant
 
             age = msLifeSpan + (sgLifeSpan * (dice.D100Roll() / 100))
-            age = round(age, 1)
+            age = round(age, 3)
             
         # Giant (Class III) stars
 
@@ -350,17 +346,17 @@ class Star:
 
             # First get the lifespan of the star in the main sequence
 
-            msLifeSpan = round(10 / (self.starMass ** 2.5), 1)
+            msLifeSpan = round(10 / (self.starMass ** 2.5), 3)
             logger.debug('Main sequence star life span is %s Gy', msLifeSpan)
 
             # Then calculate the subgiant life span
 
-            sgLifeSpan = round(msLifeSpan/(4 + self.starMass), 1)
+            sgLifeSpan = round(msLifeSpan/(4 + self.starMass), 3)
             logger.debug('Subgiant life span is %s Gy', sgLifeSpan)            
             
             # Now calculate the lifespan of the star as a giant
 
-            gLifeSpan = round(msLifeSpan / (10 * self.starMass ** 3), 1)
+            gLifeSpan = round(msLifeSpan / (10 * self.starMass ** 3), 3)
             logger.debug('Giant lifespan is %s Gy', gLifeSpan)   
 
             # Getting the variance value (place in giant lifespan)
@@ -381,7 +377,10 @@ class Star:
         # 12 billion years ago, cap the age at 12
 
         if age > 12: age = 12.0
-        age = round(age, 2)
+        age = round(age, 3)
+
+        # Put a lower bound on the age to allow for protostars later
+        if age <= 0.001: age = 0.001
 
         self.starAge = age
         logger.debug('Star age is %s Gy', self.starAge)

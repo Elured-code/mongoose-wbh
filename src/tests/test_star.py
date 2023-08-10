@@ -32,7 +32,9 @@ def test_starAge(star_Collection):
     assert star_Collection is not None
     for data_point in star_Collection: 
             
-        # replace assertions by conditions
+        # replace assertions by conditions because we are
+        # looping through numerous data points and dont want to stop
+        # on the first failure
         if not (data_point["Star Age"] <= 12.0 or data_point["Star Age"] == 0): 
 
             # Format the error message
@@ -45,21 +47,21 @@ def test_starAge(star_Collection):
     # assert no error message has been registered, else print messages
     assert not errors, "errors occured:\n{}".format("\n".join(errors))
 
-# ''' Test star Class VI restrictions '''
-# def test_starClassVI(request):
-#     data = request.config.cache.get('star_data', None)
-#     errors = []
-#     assert data is not None
-#     for data_point in data:    
+''' Test star Class VI restrictions '''
+def test_starClassVI(star_Collection):
 
-#         # replace assertions by conditions
-#         if (data_point['Star Class'] == 'VI') \
-#             and data_point['Star Type'] in ('A', 'F'):
+    errors = []
+    assert star_Collection is not None
+    for data_point in star_Collection:    
+
+        # replace assertions by conditions as above
+        if (data_point['Star Class'] == 'VI') \
+            and data_point['Star Type'] in ('A', 'F'):
                 
-#                 # Format the error message
-#                 errorMsg = 'Invalid type for Class VI star: ' \
-#                 + (data_point["Star Type"])
-#                 errors.append(errorMsg)
+                # Format the error message
+                errorMsg = 'Invalid type for Class VI star: ' \
+                + (data_point["Star Type"])
+                errors.append(errorMsg)
     
-#     # assert no error message has been registered, else print messages
-#     assert not errors, "errors occured:\n{}".format("\n".join(errors))            
+    # assert no error message has been registered, else print messages
+    assert not errors, "errors occured:\n{}".format("\n".join(errors))            

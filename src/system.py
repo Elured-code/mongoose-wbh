@@ -126,7 +126,7 @@ if __name__ == '__main__':
         
         i = 0
         for star in a_System.Stars:
-            if star.starClass == 'II':
+            if star.starClass in ('Ia', 'Ib', 'II'):
                 print('System %s \tIndex %s: \t%s%s %s \tAge %s \tMass %s' % \
                 (j+1, i, star.starType, star.starSubType, star.starClass, \
                 star.starAge, star.starMass))
