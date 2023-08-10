@@ -116,7 +116,7 @@ class System:
 
 if __name__ == '__main__':
     these_Systems = []
-    for x in range(1, 100):
+    for x in range(1, 1000):
         this_System = System('Test System')
         this_System.genSystem()
         these_Systems.append(this_System)
@@ -126,7 +126,7 @@ if __name__ == '__main__':
         
         i = 0
         for star in a_System.Stars:
-            if star.starClass == 'VI':
+            if star.starAge != 9999999:
                 print('System %s \tIndex %s: \t%s%s %s \tAge %s' % \
                 (j+1, i, star.starType, star.starSubType, star.starClass, \
                 star.starAge))

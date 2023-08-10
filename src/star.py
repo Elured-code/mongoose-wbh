@@ -314,18 +314,15 @@ class Star:
                 logger.debug ('Determining age of small main sequence star')
                 age = (dice.D6Roll() * 2) + (dice.D3Roll() - 2) + \
                     (dice.D10Roll() / 10) + (dice.D10Roll() / 100)
-
-                # Using the WBH assumption that star formation began around
-                # 12 billion years ago, cap the age at 12
-
-                if age > 12: age = 12.0
-                age = round(age, 2)
-
+                
             # Determine age for larger main sequence stars
 
             else:
                 logger.debug('Determining age of large main sequence star')
                 age = round((msLifeSpan * (dice.D100Roll() / 100)), 2)
+
+            # Put a lower bound on the age to allow for protostars later
+            if age <= 0.1: age = 0.1
 
         # Subgiant (Class IV) stars
 
@@ -353,6 +350,12 @@ class Star:
             # Placeholder to avoid crashes where i havent finished code
 
             age = 0
+
+        # Using the WBH assumption that star formation began around
+        # 12 billion years ago, cap the age at 12
+
+        if age > 12: age = 12.0
+        age = round(age, 2)
 
         self.starAge = age
         logger.debug('Star age is %s Gy', self.starAge)
@@ -444,7 +447,7 @@ class Star:
                 
             # Change Type A to Type B
 
-            if self.starType == 'A': self.starType = 'B'
+            if sType == 'A': sType = 'B'
 
             logger.debug('Determining hot subdwarf star subtype')
             r = dice.D6Rollx2() - 2
@@ -516,7 +519,7 @@ class Star:
 
             # Limit Class IV to the range B0 - K4
 
-            if r in range(1, 5): r += 5
+            if r in range(0, 5): r += 5
 
             # Cap the roll at 8 to avoid the 'Hot' result
 

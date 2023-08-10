@@ -9,42 +9,57 @@ sys.path.append(os.path.dirname(SCRIPT_DIR))
 
 from src.star import Star
 
-@pytest.fixture(autouse=True)
-def init_cache(request, capsys):
+@pytest.fixture(scope='session')
+def star_Collection():
     starCollection = []
-    for i in range(0, 10):
+    for i in range(0, 10001):
         starName = 'Test' + str(i)
         thisStar = Star()
         thisStar.starName = starName
         thisStar.genStar(0, False, False)
         data = {'Star Age': thisStar.starAge}
+        data['Star Class'] =  thisStar.starClass
+        data['Star Type'] = thisStar.starType
+        data['Star SubType'] = thisStar.starSubType
         starCollection.append(data)
-    with capsys.disabled(): print('Generated %i star objects' % i)  
-    request.config.cache.set('star_data', starCollection)
 
-@pytest.fixture
-def new_Star():
-    ''' Returns a newly initialised star object '''
-    return Star('Test')
+    return starCollection
 
 ''' Test star age '''
-def test_starAge(request):
-    data = request.config.cache.get('star_data', None)
+def test_starAge(star_Collection):
+
     errors = []
-    assert data is not None
-    for data_point in data: 
+    assert star_Collection is not None
+    for data_point in star_Collection: 
             
         # replace assertions by conditions
-        if not data_point["Star Age"] <= 12.0: 
-            errorMsg = 'Star age failed test - generated age = ' + str(data_point["Star Age"])
+        if not (data_point["Star Age"] <= 12.0 or data_point["Star Age"] == 0): 
+
+            # Format the error message
+            errorMsg = 'Invalid age: ' + str(data_point["Star Age"]) \
+                + ' ' + data_point['Star Type'] \
+                + str(data_point['Star SubType']) + ' ' \
+                + data_point['Star Class'] + ')'
             errors.append(errorMsg)
     
     # assert no error message has been registered, else print messages
     assert not errors, "errors occured:\n{}".format("\n".join(errors))
 
-''' Test star age '''
-# @pytest.mark.parametrize("roll1", D6X2ROLLS)
-# def test_gen_atm_siz0(new_World, roll1):
-#     new_World.siz = 0
-#     new_World.gen_atm(roll1)
-#     assert new_World.atm == 0
+# ''' Test star Class VI restrictions '''
+# def test_starClassVI(request):
+#     data = request.config.cache.get('star_data', None)
+#     errors = []
+#     assert data is not None
+#     for data_point in data:    
+
+#         # replace assertions by conditions
+#         if (data_point['Star Class'] == 'VI') \
+#             and data_point['Star Type'] in ('A', 'F'):
+                
+#                 # Format the error message
+#                 errorMsg = 'Invalid type for Class VI star: ' \
+#                 + (data_point["Star Type"])
+#                 errors.append(errorMsg)
+    
+#     # assert no error message has been registered, else print messages
+#     assert not errors, "errors occured:\n{}".format("\n".join(errors))            
