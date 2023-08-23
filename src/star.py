@@ -1,36 +1,39 @@
+''' star.py - system primary generation '''
+
 # Import external modules
 
-import logging
-import numpy
 import sys
 import os
+import logging
+import numpy
+
 from tinydb import TinyDB, Query
-
-# Set the Python path to allow module discovery
-
-SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-sys.path.append(os.path.dirname(SCRIPT_DIR))
 
 # Import local modules
 
 import src.utils.dice as dice
 import src.utils.tables as tables
 
+# Set the Python path to allow module discovery
+
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+sys.path.append(os.path.dirname(SCRIPT_DIR))
+
+
 # Get the logging context from the calling module
 
 logger = logging.getLogger(__name__)
 
-# Star internal class - attributes and methods for stellar generation
-
 class Star:
+    ''' Star class - for stellar bodies '''
     def __init__(self):
-            logger.debug('Initialising star object')
-            self.starName = ''
-            self.starType = ''
-            self.starSubType = ''
-            self.starClass = ''
-            self.starMass = 0
-            self.starDiameter = 0
+        logger.debug('Initialising star object')
+        self.starName = ''
+        self.starType = ''
+        self.starSubType = ''
+        self.starClass = ''
+        self.starMass = 0
+        self.starDiameter = 0
 
     # Class properties go here
     # Using properties to leave open the possibility of verifying and modifying
@@ -58,7 +61,7 @@ class Star:
     
     @starClass.setter
     def starClass(self, starClass):
-         self.__starClass = starClass
+        self.__starClass = starClass
     
     @property
     def starMass(self):
@@ -139,7 +142,7 @@ class Star:
                 # Roll again on the Peculiar table on a roll of 2
 
                 if roll == 2: 
-                     logger.debug('Determining Peculiar object type')
+                    logger.debug('Determining Peculiar object type')
 
                 # Otherwise pick from the Unusual table     
                 
@@ -212,71 +215,73 @@ class Star:
     # Generate the star mass
 
     def genStarMass(self):
-            logger.debug('Determining star mass')
+        ''' Determine stellar mass '''
+        logger.debug('Determining star mass')
 
-            # Build a query from the star class, type and subtype
+        # Build a query from the star class, type and subtype
 
-            db = TinyDB('db.json')
-            q = Query()
-            r = db.search((q.starClass == self.starClass) \
-                        & (q.starType == self.starType) \
-                        & (q.starSubType == self.starSubType))
-            
-            # There shouldn't be duplicates, but only accept the first result
+        db = TinyDB('db.json')
+        q = Query()
+        r = db.search((q.starClass == self.starClass) \
+                    & (q.starType == self.starType) \
+                    & (q.starSubType == self.starSubType))
+        
+        # There shouldn't be duplicates, but only accept the first result
 
-            r = r[0]
+        r = r[0]
 
-            # Vary the stellar mass around the base mass by up to 20%
-            # Using a normal distribution with a standard deviation of 7% 
-            # of the base mass, so about 99.5% of values will fall within 
-            # the 20% value
+        # Vary the stellar mass around the base mass by up to 20%
+        # Using a normal distribution with a standard deviation of 7% 
+        # of the base mass, so about 99.5% of values will fall within 
+        # the 20% value
 
-            # Because numpy.random can return multiple values, select the first
-            # (of one in this case)
-            # Round the result to 3 decimals and return
+        # Because numpy.random can return multiple values, select the first
+        # (of one in this case)
+        # Round the result to 3 decimals and return
 
-            mass = numpy.random.normal(r['baseMass'], r['baseMass'] * 0.07, 1)[0]
-            self.starMassVariance = mass/r['baseMass'] 
-            self.starMass = round(mass, 3)
-            logger.debug('Star mass is %s solar masses', self.starMass)
+        mass = numpy.random.normal(r['baseMass'], r['baseMass'] * 0.07, 1)[0]
+        self.starMassVariance = mass/r['baseMass'] 
+        self.starMass = round(mass, 3)
+        logger.debug('Star mass is %s solar masses', self.starMass)
 
     # Generate the star surface temperature
         
     def genStarTemp(self):
-            logger.debug('Determining star surface temperature')
-            
-            # Build a query from the star class, type and subtype
+        logger.debug('Determining star surface temperature')
+        
+        # Build a query from the star class, type and subtype
 
-            db = TinyDB('db.json')
-            q = Query()
-            r = db.search((q.starClass == self.starClass) \
-                        & (q.starType == self.starType) \
-                        & (q.starSubType == self.starSubType))
-            
-            # There shouldn't be duplicates, but only accept the first result
+        db = TinyDB('db.json')
+        q = Query()
+        r = db.search((q.starClass == self.starClass) \
+                    & (q.starType == self.starType) \
+                    & (q.starSubType == self.starSubType))
+        
+        # There shouldn't be duplicates, but only accept the first result
 
-            r = r[0]
-            self.starTemp = r['baseTemp']
-            logger.debug('Star surface temperature is %sK', self.starTemp)
+        r = r[0]
+        self.starTemp = r['baseTemp']
+        logger.debug('Star surface temperature is %sK', self.starTemp)
 
     # Generate the star diameter
 
     def genStarDiameter(self):
-            logger.debug('Calculating star diameter')
-            
-            # Build a query from the star class, type and subtype
+        ''' Generate stellar diameter '''
+        logger.debug('Calculating star diameter')
+        
+        # Build a query from the star class, type and subtype
 
-            db = TinyDB('db.json')
-            q = Query()
-            r = db.search((q.starClass == self.starClass) \
-                        & (q.starType == self.starType) \
-                        & (q.starSubType == self.starSubType))
-            
-            # There shouldn't be duplicates, but only accept the first result
+        db = TinyDB('db.json')
+        q = Query()
+        r = db.search((q.starClass == self.starClass) \
+                    & (q.starType == self.starType) \
+                    & (q.starSubType == self.starSubType))
+        
+        # There shouldn't be duplicates, but only accept the first result
 
-            r = r[0]
-            self.starDiameter = r['diameter']
-            logger.debug('Star diameter is %s solar diameters', self.starDiameter)
+        r = r[0]
+        self.starDiameter = r['diameter']
+        logger.debug('Star diameter is %s solar diameters', self.starDiameter)
 
     # Generate star luminosity
 
@@ -536,7 +541,7 @@ class Star:
 
             logging.debug('Determining star subtype')
             r3 = dice.D6Rollx2() - 2
-            sSubType = tables.STAR_SUBTYPES[r]
+            sSubType = tables.STAR_SUBTYPES[r3]
 
         # Now non-hot sugiants
 
