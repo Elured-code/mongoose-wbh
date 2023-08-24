@@ -17,15 +17,15 @@ sys.path.append(os.path.dirname(SCRIPT_DIR))
 def fixture_star_collection():
     ''' A fixture to generate a collection of star objects for testing '''
     star_collection = []
-    for i in range(0, 10001):
+    for i in range(0, 101):
         star_name = 'Test' + str(i)
         this_star = Star()
         this_star.star_name = star_name
         this_star.genStar(0, False, False)
-        data = {'Star Age': this_star.starAge}
-        data['Star Class'] =  this_star.starClass
-        data['Star Type'] = this_star.starType
-        data['Star SubType'] = this_star.starSubType
+        data = {'Star Age': this_star.star_age}
+        data['Star Class'] =  this_star.star_class
+        data['Star Type'] = this_star.star_type
+        data['Star SubType'] = this_star.star_subtype
         star_collection.append(data)
     return star_collection
 

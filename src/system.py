@@ -62,7 +62,7 @@ def createSystemJSON(System):
             starJSON['Subtype'] = star.star_subtype
             starJSON['Stellar Class'] = star.star_class
             starJSON['Stellar Mass'] = star.star_mass
-            starJSON['Stellar Surface Temperature'] = star.star_temperature
+            starJSON['Stellar Surface Temperature'] = star.star_temp
             starJSON['Stellar Diameter'] = star.star_diameter
             starJSON['Stellar Luminosity'] = star.star_luminosity
             starJSON['Stellar Age'] = star.star_age
@@ -116,7 +116,7 @@ class System:
 
 if __name__ == '__main__':
     these_Systems = []
-    for x in range(1, 10000):
+    for x in range(1, 51):
         this_System = System('Test System')
         this_System.genSystem()
         these_Systems.append(this_System)
@@ -133,9 +133,9 @@ if __name__ == '__main__':
             i += 1
         j += 1
 
-    # systemJSON = json.dumps(createSystemJSON(this_System), indent=4)
+    systemJSON = json.dumps(createSystemJSON(this_System), indent=4)
 
-    # print(systemJSON)
+    print(systemJSON)
 
 
 
