@@ -58,15 +58,15 @@ def createSystemJSON(System):
             i = 0
             starJSON = {}
             starJSON['Index'] = i
-            starJSON['Stellar Type'] = star.starType
-            starJSON['Subtype'] = star.starSubType
-            starJSON['Stellar Class'] = star.starClass
-            starJSON['Stellar Mass'] = star.starMass
-            starJSON['Stellar Surface Temperature'] = star.starTemp
-            starJSON['Stellar Diameter'] = star.starDiameter
-            starJSON['Stellar Luminosity'] = star.starLuminosity
-            starJSON['Stellar Age'] = star.starAge
-            starJSON['Stellar Colour'] = star.starColour
+            starJSON['Stellar Type'] = star.star_type
+            starJSON['Subtype'] = star.star_subtype
+            starJSON['Stellar Class'] = star.star_class
+            starJSON['Stellar Mass'] = star.star_mass
+            starJSON['Stellar Surface Temperature'] = star.star_temperature
+            starJSON['Stellar Diameter'] = star.star_diameter
+            starJSON['Stellar Luminosity'] = star.star_luminosity
+            starJSON['Stellar Age'] = star.star_age
+            starJSON['Stellar Colour'] = star.star_colour
             
             starsJSON.append(starJSON)
             
@@ -126,10 +126,10 @@ if __name__ == '__main__':
         
         i = 0
         for star in a_System.Stars:
-            if star.starClass in ('Ia', 'Ib', 'II'):
+            if star.star_class in ('Ia', 'Ib', 'II'):
                 print('System %s \tIndex %s: \t%s%s %s \tAge %s \tMass %s' % \
-                (j+1, i, star.starType, star.starSubType, star.starClass, \
-                star.starAge, star.starMass))
+                (j+1, i, star.star_type, star.star_subtype, star.star_class, \
+                star.star_age, star.star_mass))
             i += 1
         j += 1
 

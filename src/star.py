@@ -1,5 +1,10 @@
 ''' star.py - system primary generation '''
 
+# PyLint rule customisations
+# pylint: disable=wrong-import-position
+# pylint: disable=too-many-instance-attributes
+# pylint: disable=too-many-public-methods
+
 # Import external modules
 
 import sys
@@ -9,16 +14,15 @@ import numpy
 
 from tinydb import TinyDB, Query
 
-# Import local modules
-
-import src.utils.dice as dice
-import src.utils.tables as tables
-
 # Set the Python path to allow module discovery
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(os.path.dirname(SCRIPT_DIR))
 
+# Import local modules
+
+from src.utils import dice
+from src.utils import tables
 
 # Get the logging context from the calling module
 
@@ -26,105 +30,111 @@ logger = logging.getLogger(__name__)
 
 class Star:
     ''' Star class - for stellar bodies '''
+
     def __init__(self):
         logger.debug('Initialising star object')
-        self.starName = ''
-        self.starType = ''
-        self.starSubType = ''
-        self.starClass = ''
-        self.starMass = 0
-        self.starDiameter = 0
+        self.star_name = ''
+        self.star_type = ''
+        self.star_subtype = ''
+        self.star_class = ''
+        self.star_mass = 0
+        self.star_diameter = 0
 
     # Class properties go here
     # Using properties to leave open the possibility of verifying and modifying
     # values as they are set
 
     @property
-    def starName(self):
-        return self.__starName
-    
-    @starName.setter
-    def starName(self, starName):
-        self.__starName = starName
+    def star_name(self):
+        ''' The name of the stellar object (not necessarily the system name)'''
+        return self.__star_name
+
+    @star_name.setter
+    def star_name(self, star_name):
+        self.__star_name = star_name
 
     @property
-    def starType(self):
-        return self.__starType
-    
-    @starType.setter
-    def starType(self, starType):
-        self.__starType = starType
+    def star_type(self):
+        ''' Star spectral type '''
+        return self.__star_type
+
+    @star_type.setter
+    def star_type(self, star_type):
+        self.__star_type = star_type
 
     @property
-    def starClass(self):
-        return self.__starClass
-    
-    @starClass.setter
-    def starClass(self, starClass):
-        self.__starClass = starClass
-    
-    @property
-    def starMass(self):
-        return self.__starMass
-    
-    @starMass.setter
-    def starMass(self, starMass):
-        self.__starMass = starMass
+    def star_class(self):
+        ''' Star mass class '''
+        return self.__star_class
+
+    @star_class.setter
+    def star_class(self, star_class):
+        self.__star_class = star_class
 
     @property
-    def starMassVariance(self):
-        return self.__starMassVariance
-    
-    @starMassVariance.setter
-    def starMassVariance(self, starMassVariance):
-        self.__starMassVariance = starMassVariance
+    def star_mass(self):
+        ''' Star mass in solar masses '''
+        return self.__star_mass
 
-
-    @property
-    def starTemp(self):
-        return self.__starTemp
-    
-    @starTemp.setter
-    def starTemp(self, starTemp):
-        self.__starTemp = starTemp
-    
-    @property
-    def starDiameter(self):
-        return self.__starDiameter
-    
-    @starDiameter.setter
-    def starDiameter(self, starDiameter):
-        self.__starDiameter = starDiameter
+    @star_mass.setter
+    def star_mass(self, star_mass):
+        self.__star_mass = star_mass
 
     @property
-    def starLuminosity(self):
-        return self.__starLuminosity
-    
-    @starLuminosity.setter
-    def starLuminosity(self, starLuminosity):
-        self.__starLuminosity = starLuminosity
+    def star_mass_variance(self):
+        ''' Variance between class/type/subtype mass and actual mass '''
+        return self.__star_mass_variance
+
+    @star_mass_variance.setter
+    def star_mass_variance(self, star_mass_variance):
+        self.__star_mass_variance = star_mass_variance
 
     @property
-    def starAge(self):
-        return self.__starAge
-    
-    @starAge.setter
-    def starAge(self, starAge):
-        self.__starAge = starAge
+    def star_temp(self):
+        ''' Star surface temperature '''
+        return self.__star_temp
+
+    @star_temp.setter
+    def star_temp(self, star_temp):
+        self.__star_temp = star_temp
 
     @property
-    def starColour(self):
-        return self.__starColour
+    def star_diameter(self):
+        return self.__star_diameter
     
-    @starColour.setter
-    def starColour(self, starColour):
-        self.__starColour = starColour
+    @star_diameter.setter
+    def star_diameter(self, star_diameter):
+        self.__star_diameter = star_diameter
+
+    @property
+    def star_luminosity(self):
+        return self.__star_luminosity
+    
+    @star_luminosity.setter
+    def star_luminosity(self, star_luminosity):
+        self.__star_luminosity = star_luminosity
+
+    @property
+    def star_age(self):
+        return self.__star_age
+    
+    @star_age.setter
+    def star_age(self, star_age):
+        self.__star_age = star_age
+
+    @property
+    def star_colour(self):
+        return self.__star_colour
+    
+    @star_colour.setter
+    def star_colour(self, star_colour):
+        self.__star_colour = star_colour
     
     # Determine the star type
     # MGT2 WBH pp15-16
     #
 
-    def genStarType(self, dm, includeUnusual, isPrimary):
+    def genstar_type(self, dm, includeUnusual, isPrimary):
         logger.debug('Determining star type')
         roll = dice.D6Rollx2() + dm
         logger.debug('Roll = %s', roll)
@@ -161,60 +171,60 @@ class Star:
                     
                     # Determine the stellar class
                     
-                    self.starClass = tables.SPECIAL_STAR_CLASSES[roll - 2]
-                    logger.debug('Star class is %s', self.starClass)
+                    self.star_class = tables.SPECIAL_STAR_CLASSES[roll - 2]
+                    logger.debug('Star class is %s', self.star_class)
                 
                     # Now determine the stellar type
                     # First for Class VI stars
 
-                    if self.starClass == 'VI':
+                    if self.star_class == 'VI':
                         logger.debug('Determining Class VI type')
                         roll = dice.D6Rollx2() + 1
                         sDetails = self.genSubDwarfStar()
-                        self.starClass = sDetails[0]
-                        self.starType = sDetails[1]
-                        self.starSubType = sDetails[2]
+                        self.star_class = sDetails[0]
+                        self.star_type = sDetails[1]
+                        self.star_subtype = sDetails[2]
 
                     # Now determine for Class IV stars
 
-                    elif self.starClass == 'IV':
+                    elif self.star_class == 'IV':
                         sDetails = self.genSubGiantStar()
-                        self.starClass = sDetails[0]
-                        self.starType  = sDetails[1]
-                        self.starSubType = sDetails[2]
+                        self.star_class = sDetails[0]
+                        self.star_type  = sDetails[1]
+                        self.star_subtype = sDetails[2]
 
                 # Now handle giants
                 
                 else:
                     sDetails = self.genGiantStar()
-                    self.starClass = sDetails[0]
-                    self.starType = sDetails[1]
-                    self.starSubType = sDetails[2]                    
+                    self.star_class = sDetails[0]
+                    self.star_type = sDetails[1]
+                    self.star_subtype = sDetails[2]                    
 
         # Modified rolls of 12 or greater are Hot stars, handle them here
 
         elif roll >= 12:
             sDetails = self.genHotStar()
-            self.starClass = sDetails[0]
-            self.starType = sDetails[1]
-            self.starSubType = sDetails[2]
+            self.star_class = sDetails[0]
+            self.star_type = sDetails[1]
+            self.star_subtype = sDetails[2]
 
         # All others are 'normal' main sequence stars
 
         else:
             logger.debug('Determining Normal object type')
             sDetails = self.genMainSequenceStar(roll, isPrimary)
-            self.starClass = sDetails[0]
-            self.starType = sDetails[1]
-            self.starSubType = sDetails[2]
+            self.star_class = sDetails[0]
+            self.star_type = sDetails[1]
+            self.star_subtype = sDetails[2]
 
-        logger.debug('Star type is %s', self.starType)
-        logger.debug('Star subtype is %s', self.starSubType)
-        logger.debug('Star class is %s', self.starClass)
+        logger.debug('Star type is %s', self.star_type)
+        logger.debug('Star subtype is %s', self.star_subtype)
+        logger.debug('Star class is %s', self.star_class)
 
     # Generate the star mass
 
-    def genStarMass(self):
+    def genstar_mass(self):
         ''' Determine stellar mass '''
         logger.debug('Determining star mass')
 
@@ -222,9 +232,9 @@ class Star:
 
         db = TinyDB('db.json')
         q = Query()
-        r = db.search((q.starClass == self.starClass) \
-                    & (q.starType == self.starType) \
-                    & (q.starSubType == self.starSubType))
+        r = db.search((q.star_class == self.star_class) \
+                    & (q.star_type == self.star_type) \
+                    & (q.star_subtype == self.star_subtype))
         
         # There shouldn't be duplicates, but only accept the first result
 
@@ -240,32 +250,32 @@ class Star:
         # Round the result to 3 decimals and return
 
         mass = numpy.random.normal(r['baseMass'], r['baseMass'] * 0.07, 1)[0]
-        self.starMassVariance = mass/r['baseMass'] 
-        self.starMass = round(mass, 3)
-        logger.debug('Star mass is %s solar masses', self.starMass)
+        self.star_mass_variance = mass/r['baseMass'] 
+        self.star_mass = round(mass, 3)
+        logger.debug('Star mass is %s solar masses', self.star_mass)
 
     # Generate the star surface temperature
         
-    def genStarTemp(self):
+    def genstar_temp(self):
         logger.debug('Determining star surface temperature')
         
         # Build a query from the star class, type and subtype
 
         db = TinyDB('db.json')
         q = Query()
-        r = db.search((q.starClass == self.starClass) \
-                    & (q.starType == self.starType) \
-                    & (q.starSubType == self.starSubType))
+        r = db.search((q.star_class == self.star_class) \
+                    & (q.star_type == self.star_type) \
+                    & (q.star_subtype == self.star_subtype))
         
         # There shouldn't be duplicates, but only accept the first result
 
         r = r[0]
-        self.starTemp = r['baseTemp']
-        logger.debug('Star surface temperature is %sK', self.starTemp)
+        self.star_temp = r['baseTemp']
+        logger.debug('Star surface temperature is %sK', self.star_temp)
 
     # Generate the star diameter
 
-    def genStarDiameter(self):
+    def genstar_diameter(self):
         ''' Generate stellar diameter '''
         logger.debug('Calculating star diameter')
         
@@ -273,48 +283,48 @@ class Star:
 
         db = TinyDB('db.json')
         q = Query()
-        r = db.search((q.starClass == self.starClass) \
-                    & (q.starType == self.starType) \
-                    & (q.starSubType == self.starSubType))
+        r = db.search((q.star_class == self.star_class) \
+                    & (q.star_type == self.star_type) \
+                    & (q.star_subtype == self.star_subtype))
         
         # There shouldn't be duplicates, but only accept the first result
 
         r = r[0]
-        self.starDiameter = r['diameter']
-        logger.debug('Star diameter is %s solar diameters', self.starDiameter)
+        self.star_diameter = r['diameter']
+        logger.debug('Star diameter is %s solar diameters', self.star_diameter)
 
     # Generate star luminosity
 
-    def genStarLuminosity(self):
+    def genstar_luminosity(self):
         logger.debug('Calculating star luminosity')
-        self.starLuminosity = \
-            (self.starDiameter ** 2) * (self.starTemp/5800) ** 4
+        self.star_luminosity = \
+            (self.star_diameter ** 2) * (self.star_temp/5800) ** 4
         
         # Apply the mass variance to luminosity
 
-        self.starLuminosity = round((self.starLuminosity * self.starMassVariance), 3)
-        logger.debug('Star luminosity is %s x solar luminosity', self.starLuminosity)
+        self.star_luminosity = round((self.star_luminosity * self.star_mass_variance), 3)
+        logger.debug('Star luminosity is %s x solar luminosity', self.star_luminosity)
 
     # Generate the star/system age
 
-    def genStarAge(self):
+    def genstar_age(self):
         logger.debug('Calculating star age')
 
         # Handle non-post-main sequence stars first
         # This includes class Ia, Ib, II and VI
 
-        if self.starClass in ['Ia', 'Ib', 'II', 'V', 'VI']:
+        if self.star_class in ['Ia', 'Ib', 'II', 'V', 'VI']:
             logger.debug('Determining main sequence star age')
             
             # First determine the star lifespan
 
-            msLifeSpan = round(10 / (self.starMass ** 2.5), 3)
+            msLifeSpan = round(10 / (self.star_mass ** 2.5), 3)
             logger.debug('Main sequence star life span is %s Gy', msLifeSpan)
 
             # Determine age for small main sequence stars
             # (mass <= 0.9)
 
-            if self.starMass <= 0.9:
+            if self.star_mass <= 0.9:
                 logger.debug ('Determining age of small main sequence star')
                 age = (dice.D6Roll() * 2) + (dice.D3Roll() - 2) + \
                     (dice.D10Roll() / 10) + (dice.D10Roll() / 100)
@@ -327,17 +337,17 @@ class Star:
 
         # Subgiant (Class IV) stars
 
-        elif self.starClass == 'IV':
+        elif self.star_class == 'IV':
 
             # First get the lifespan of the star in the main sequence
 
-            msLifeSpan = round(10 / (self.starMass ** 2.5), 3)
+            msLifeSpan = round(10 / (self.star_mass ** 2.5), 3)
             logger.debug('Main sequence star life span is %s Gy', msLifeSpan)
 
             # Now get the lifespan of the star as a subgiant
 
             logger.debug('Determining age for subgiant star')
-            sgLifeSpan = round(msLifeSpan/(4 + self.starMass), 3)
+            sgLifeSpan = round(msLifeSpan/(4 + self.star_mass), 3)
             logger.debug('Subgiant life span is %s Gy', sgLifeSpan)
 
             # Determine the stars position in its life as a subgiant
@@ -347,21 +357,21 @@ class Star:
             
         # Giant (Class III) stars
 
-        elif self.starClass == 'III':
+        elif self.star_class == 'III':
 
             # First get the lifespan of the star in the main sequence
 
-            msLifeSpan = round(10 / (self.starMass ** 2.5), 3)
+            msLifeSpan = round(10 / (self.star_mass ** 2.5), 3)
             logger.debug('Main sequence star life span is %s Gy', msLifeSpan)
 
             # Then calculate the subgiant life span
 
-            sgLifeSpan = round(msLifeSpan/(4 + self.starMass), 3)
+            sgLifeSpan = round(msLifeSpan/(4 + self.star_mass), 3)
             logger.debug('Subgiant life span is %s Gy', sgLifeSpan)            
             
             # Now calculate the lifespan of the star as a giant
 
-            gLifeSpan = round(msLifeSpan / (10 * self.starMass ** 3), 3)
+            gLifeSpan = round(msLifeSpan / (10 * self.star_mass ** 3), 3)
             logger.debug('Giant lifespan is %s Gy', gLifeSpan)   
 
             # Getting the variance value (place in giant lifespan)
@@ -387,19 +397,19 @@ class Star:
         # Put a lower bound on the age to allow for protostars later
         if age <= 0.001: age = 0.001
 
-        self.starAge = age
-        logger.debug('Star age is %s Gy', self.starAge)
+        self.star_age = age
+        logger.debug('Star age is %s Gy', self.star_age)
 
     # Get the star colour
 
-    def genStarColour(self):
+    def genstar_colour(self):
         logger.debug('Determining star colour')
         db = TinyDB('db.json')
         q = Query()
-        r = db.search((q.starType == self.starType))
+        r = db.search((q.star_type == self.star_type))
         r = r[0]
-        self.starColour = r['starColour']
-        logger.debug('Star colour is %s', self.starColour)
+        self.star_colour = r['star_colour']
+        logger.debug('Star colour is %s', self.star_colour)
 
     # The methods below determine class, type and subtypes
     #
@@ -615,24 +625,24 @@ class Star:
     #
     
     def genStar(self, dm, includeUnusual, isPrimary):
-        self.genStarType(dm, includeUnusual, isPrimary)
-        self.genStarMass()
-        self.genStarTemp()
-        self.genStarDiameter()
-        self.genStarLuminosity()
-        self.genStarAge()
-        self.genStarColour()
+        self.genstar_type(dm, includeUnusual, isPrimary)
+        self.genstar_mass()
+        self.genstar_temp()
+        self.genstar_diameter()
+        self.genstar_luminosity()
+        self.genstar_age()
+        self.genstar_colour()
 
         # Debugging code to catch non-typed stars
 
-        if self.starType == '': input("Press Enter to continue...")   
+        if self.star_type == '': input("Press Enter to continue...")   
 
 if __name__ == '__main__':
     thisStar = Star()
     thisStar.genStar(0, False, True)
 
-    print('Mass', thisStar.starMass) 
-    print('Variance', thisStar.starMassVariance)
-    print('Temperature', thisStar.starTemp)  
-    print('Diameter', thisStar.starDiameter)
-    print('Luminosity', thisStar.starLuminosity)   
+    print('Mass', thisStar.star_mass) 
+    print('Variance', thisStar.star_mass_variance)
+    print('Temperature', thisStar.star_temp)  
+    print('Diameter', thisStar.star_diameter)
+    print('Luminosity', thisStar.star_luminosity)   
