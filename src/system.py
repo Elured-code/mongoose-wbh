@@ -1,3 +1,10 @@
+''' system.py:  MG2T WBH system generation '''
+
+# PyLint rule customisations
+# pylint: disable=wrong-import-position
+# pylint: disable=too-many-instance-attributes
+# pylint: disable=too-many-public-methods
+
 # Import external modules
 
 import json
@@ -12,7 +19,7 @@ sys.path.append(os.path.dirname(SCRIPT_DIR))
 
 # Import local modules
 
-import star as star
+from src import star
 
 # Configure logging
 

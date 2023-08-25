@@ -218,7 +218,7 @@ class Star:
 
         else:
             logger.debug('Determining Normal object type')
-            star_details = self.genMainSequenceStar(roll, is_primary)
+            star_details = self.gen_main_sequence_star(roll, is_primary)
             self.star_class = star_details[0]
             self.star_type = star_details[1]
             self.star_subtype = star_details[2]
@@ -287,16 +287,16 @@ class Star:
 
         # Build a query from the star class, type and subtype
 
-        db = TinyDB('db.json')
-        q = Query()
-        r = db.search((q.star_class == self.star_class) \
-                    & (q.star_type == self.star_type) \
-                    & (q.star_subtype == self.star_subtype))
+        star_details_db = TinyDB('db.json')
+        this_query = Query()
+        query_result = star_details_db.search((this_query.star_class == self.star_class) \
+                    & (this_query.star_type == self.star_type) \
+                    & (this_query.star_subtype == self.star_subtype))
 
         # There shouldn't be duplicates, but only accept the first result
 
-        r = r[0]
-        self.star_diameter = r['diameter']
+        query_result = query_result[0]
+        self.star_diameter = query_result['diameter']
         logger.debug('Star diameter is %s solar diameters', self.star_diameter)
 
     # Generate star luminosity
@@ -326,8 +326,8 @@ class Star:
 
             # First determine the star lifespan
 
-            msLifeSpan = round(10 / (self.star_mass ** 2.5), 3)
-            logger.debug('Main sequence star life span is %s Gy', msLifeSpan)
+            main_sequence_lifespan = round(10 / (self.star_mass ** 2.5), 3)
+            logger.debug('Main sequence star life span is %s Gy', main_sequence_lifespan)
 
             # Determine age for small main sequence stars
             # (mass <= 0.9)
@@ -341,7 +341,7 @@ class Star:
 
             else:
                 logger.debug('Determining age of large main sequence star')
-                age = round((msLifeSpan * (dice.D100Roll() / 100)), 3)
+                age = round((main_sequence_lifespan * (dice.D100Roll() / 100)), 3)
 
         # Subgiant (Class IV) stars
 
@@ -349,18 +349,18 @@ class Star:
 
             # First get the lifespan of the star in the main sequence
 
-            msLifeSpan = round(10 / (self.star_mass ** 2.5), 3)
-            logger.debug('Main sequence star life span is %s Gy', msLifeSpan)
+            main_sequence_lifespan = round(10 / (self.star_mass ** 2.5), 3)
+            logger.debug('Main sequence star life span is %s Gy', main_sequence_lifespan)
 
             # Now get the lifespan of the star as a subgiant
 
             logger.debug('Determining age for subgiant star')
-            sgLifeSpan = round(msLifeSpan/(4 + self.star_mass), 3)
-            logger.debug('Subgiant life span is %s Gy', sgLifeSpan)
+            subgiant_lifespan = round(main_sequence_lifespan/(4 + self.star_mass), 3)
+            logger.debug('Subgiant life span is %s Gy', subgiant_lifespan)
 
             # Determine the stars position in its life as a subgiant
 
-            age = msLifeSpan + (sgLifeSpan * (dice.D100Roll() / 100))
+            age = main_sequence_lifespan + (subgiant_lifespan * (dice.D100Roll() / 100))
             age = round(age, 3)
 
         # Giant (Class III) stars
@@ -369,26 +369,26 @@ class Star:
 
             # First get the lifespan of the star in the main sequence
 
-            msLifeSpan = round(10 / (self.star_mass ** 2.5), 3)
-            logger.debug('Main sequence star life span is %s Gy', msLifeSpan)
+            main_sequence_lifespan = round(10 / (self.star_mass ** 2.5), 3)
+            logger.debug('Main sequence star life span is %s Gy', main_sequence_lifespan)
 
             # Then calculate the subgiant life span
 
-            sgLifeSpan = round(msLifeSpan/(4 + self.star_mass), 3)
-            logger.debug('Subgiant life span is %s Gy', sgLifeSpan)
+            subgiant_lifespan = round(main_sequence_lifespan/(4 + self.star_mass), 3)
+            logger.debug('Subgiant life span is %s Gy', subgiant_lifespan)
 
             # Now calculate the lifespan of the star as a giant
 
-            gLifeSpan = round(msLifeSpan / (10 * self.star_mass ** 3), 3)
-            logger.debug('Giant lifespan is %s Gy', gLifeSpan)   
+            giant_lifespan = round(main_sequence_lifespan / (10 * self.star_mass ** 3), 3)
+            logger.debug('Giant lifespan is %s Gy', giant_lifespan)   
 
             # Getting the variance value (place in giant lifespan)
 
-            variance = (gLifeSpan * (dice.D1000Roll() / 100))
+            variance = (giant_lifespan * (dice.D1000Roll() / 100))
 
             # Finally calculate the star age from previous values
 
-            age = round(msLifeSpan + sgLifeSpan + variance, 1)
+            age = round(main_sequence_lifespan + subgiant_lifespan + variance, 1)
 
         else:
 
@@ -399,11 +399,11 @@ class Star:
         # Using the WBH assumption that star formation began around
         # 12 billion years ago, cap the age at 12
 
-        if age > 12: age = 12.0
+        age = min(age, 12.0)
         age = round(age, 3)
 
         # Put a lower bound on the age to allow for protostars later
-        if age <= 0.001: age = 0.001
+        age = max(age, 0.001)
 
         self.star_age = age
         logger.debug('Star age is %s Gy', self.star_age)
@@ -411,10 +411,11 @@ class Star:
     # Get the star colour
 
     def genstar_colour(self):
+        ''' Determine the star colour based on spectral class/subclass '''
         logger.debug('Determining star colour')
-        db = TinyDB('db.json')
+        star_details_db = TinyDB('db.json')
         q = Query()
-        r = db.search((q.star_type == self.star_type))
+        r = star_details_db.search((q.star_type == self.star_type))
         r = r[0]
         self.star_colour = r['star_colour']
         logger.debug('Star colour is %s', self.star_colour)
@@ -424,15 +425,15 @@ class Star:
     # Generate a main sequence star
     #
 
-    def genMainSequenceStar(self, roll, is_primary):
+    def gen_main_sequence_star(self, roll, is_primary):
         ''' Generate characteristics for a main sequence (Class V) star '''
         logger.debug('Determining Normal object type')
 
         # Subtract an additional 1 from the roll as a roll of 2 is
         # a Special object
 
-        sType = tables.STAR_TYPES[roll - 3]
-        sClass = 'V'
+        star_type = tables.STAR_TYPES[roll - 3]
+        star_class = 'V'
 
         # Determine the subtype
 
@@ -440,8 +441,8 @@ class Star:
 
         # Non Type M stars first
 
-        if sType != 'M':
-            logger.debug('Determining subtype for %s class', sClass)
+        if star_type != 'M':
+            logger.debug('Determining subtype for %s class', star_class)
             r = dice.D6Rollx2() - 2
             sSubType = tables.STAR_SUBTYPES[r]
 
@@ -449,34 +450,34 @@ class Star:
 
         elif is_primary:
             logger.debug('Determinng subtype for %s class (PRIMARY)', \
-                        sClass)
+                        star_class)
             r = dice.D6Rollx2() - 2
             sSubType = tables.MSTAR_SUBTYPES[r]
         else: 
             logger.debug('Determining subtype for %s class (NON-PRIMARY)', \
-                        sClass)
+                        star_class)
             r = dice.D6Rollx2() - 2
             sSubType = tables.STAR_SUBTYPES[r]        
 
-        logger.debug('Returning class %s, type %s, subtype %s', sClass, sType, sSubType)
-        return sClass, sType, sSubType
+        logger.debug('Returning class %s, type %s, subtype %s', star_class, star_type, sSubType)
+        return star_class, star_type, sSubType
 
     #
     # Generate a hot main sequence star
     #
 
     def genHotStar(self):
-        sClass = 'V'
+        star_class = 'V'
         logger.debug('Determining Hot star type')
         r = dice.D6Rollx2() - 2
-        sType = tables.HOT_STAR_TYPES[r]         
+        star_type = tables.HOT_STAR_TYPES[r]         
 
         logger.debug('Determining Hot star subtype')
         r = dice.D6Rollx2() - 2        
         sSubType = tables.STAR_SUBTYPES[r]
 
-        logger.debug('Returning class %s, type %s, subtype %s', sClass, sType, sSubType)
-        return sClass, sType, sSubType
+        logger.debug('Returning class %s, type %s, subtype %s', star_class, star_type, sSubType)
+        return star_class, star_type, sSubType
 
     #
     # Generate a subdwarf star
@@ -484,23 +485,24 @@ class Star:
 
     def genSubDwarfStar(self):
         logger.debug('Determining subgiant star type')
-        sClass = 'VI'
+        star_class = 'VI'
         roll = dice.D6Rollx2() + 1
 
         # Hot subdwarfs first
 
         if roll > 11:
             logging.debug('Determining hot subdwarf star subtype')
-            r = dice.D6Rollx2() - 2
-            sType = tables.HOT_STAR_TYPES[r]
+            roll2 = dice.D6Rollx2() - 2
+            star_type = tables.HOT_STAR_TYPES[roll2]
 
             # Change Type A to Type B
 
-            if sType == 'A': sType = 'B'
+            if star_type == 'A':
+                star_type = 'B'
 
             logger.debug('Determining hot subdwarf star subtype')
-            r = dice.D6Rollx2() - 2
-            sSubType = tables.STAR_SUBTYPES[r]
+            roll3 = dice.D6Rollx2() - 2
+            sSubType = tables.STAR_SUBTYPES[roll3]
 
         # Now all other subdwarfs
 
@@ -515,33 +517,33 @@ class Star:
 
             if r == 9:
                 r2 = dice.D6Rollx2() - 2
-                sType = tables.HOT_STAR_TYPES[r2]
+                star_type = tables.HOT_STAR_TYPES[r2]
 
             # 'Normal' subdwarfs
 
-            else: sType = tables.STAR_TYPES[r]
+            else: star_type = tables.STAR_TYPES[r]
 
             # Change Type F to Type G
 
-            if sType == 'F':  sType = 'G'
+            if star_type == 'F':  star_type = 'G'
 
             # Change Type A to Type B
 
-            if sType == 'A':  sType = 'B'
+            if star_type == 'A':  star_type = 'B'
 
             logging.debug('Determining subdwarf subtype')
             r = dice.D6Rollx2() - 2
             sSubType = tables.STAR_SUBTYPES[r]
 
-        logger.debug('Returning class %s, type %s, subtype %s', sClass, sType, sSubType)
-        return sClass, sType, sSubType
+        logger.debug('Returning class %s, type %s, subtype %s', star_class, star_type, sSubType)
+        return star_class, star_type, sSubType
 
     #
     # Generate a subgiant star
     #
 
     def genSubGiantStar(self):
-        sClass = 'IV'
+        star_class = 'IV'
         logging.debug('Determining Subgiant type')
         r = dice.D6Rollx2() - 3 + 1 # +1 die_modifier for class rolls
                                     # -2 to match table index
@@ -550,11 +552,11 @@ class Star:
 
         if r >= 9:
             r2 = dice.D6Rollx2() - 2
-            sType = tables.HOT_STAR_TYPES[r2]
+            star_type = tables.HOT_STAR_TYPES[r2]
 
             # Change O to B
 
-            if sType == 'O': sType = 'B'
+            if star_type == 'O': star_type = 'B'
 
             # Now determine the subtype
 
@@ -574,7 +576,7 @@ class Star:
 
             if r >= 8: r = 8
 
-            sType = tables.STAR_TYPES[r]
+            star_type = tables.STAR_TYPES[r]
 
             logging.debug('Determining star subtype')
             r = dice.D6Rollx2() - 2
@@ -582,9 +584,9 @@ class Star:
 
             # Any K5 or lower gets converted to K4
 
-            if (sType == 'K') and (sSubType > 4): sSubType = 4
+            if (star_type == 'K') and (sSubType > 4): sSubType = 4
 
-        return sClass, sType, sSubType
+        return star_class, star_type, sSubType
 
     #
     # Generate a giant star
@@ -593,7 +595,7 @@ class Star:
     def genGiantStar(self):
         logging.debug('Determining Giant class')
         r = dice.D6Rollx2() - 2
-        sClass = tables.GIANT_STAR_CLASSES[r]
+        star_class = tables.GIANT_STAR_CLASSES[r]
 
         logging.debug('Determining Giant type')
 
@@ -612,14 +614,14 @@ class Star:
         if r >= 12:
             logging.debug('Determining Hot Giant type')
             r2 = dice.D6Rollx2() - 2
-            sType = tables.HOT_STAR_TYPES[r2]
+            star_type = tables.HOT_STAR_TYPES[r2]
 
         # Otherwise use the normal type table (roll is now 3 to 11)
         # Subtract 3 to get the correct table entry
 
         else:
             logging.debug('Determining non-Hot Giant type')
-            sType = tables.STAR_TYPES[r - 3]
+            star_type = tables.STAR_TYPES[r - 3]
 
         # Now determine the subtype
 
@@ -627,7 +629,7 @@ class Star:
         r = dice.D6Rollx2() - 2
         sSubType = tables.STAR_SUBTYPES[r] 
 
-        return sClass, sType, sSubType 
+        return star_class, star_type, sSubType 
 
     # Generate the star, calling the previous object methods to determine
     # stellar characteristics
@@ -655,4 +657,3 @@ if __name__ == '__main__':
     print('Temperature', thisStar.star_temp)  
     print('Diameter', thisStar.star_diameter)
     print('Luminosity', thisStar.star_luminosity)
-    
