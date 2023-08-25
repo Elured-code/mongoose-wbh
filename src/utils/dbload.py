@@ -1,3 +1,9 @@
+# PyLint rule customisations
+# pylint: disable=wrong-import-position
+# pylint: disable=too-many-instance-attributes
+# pylint: disable=too-many-public-methods
+# pylint: disable=line-too-long
+
 from tinydb import TinyDB, Query
 
 
