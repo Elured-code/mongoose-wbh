@@ -156,10 +156,10 @@ class Star:
 
                 # Roll again on the Peculiar table on a roll of 2
 
-                if roll == 2: 
+                if roll == 2:
                     logger.debug('Determining Peculiar object type')
 
-                # Otherwise pick from the Unusual table     
+                # Otherwise pick from the Unusual table
 
                 else:
                     pass
@@ -167,7 +167,7 @@ class Star:
             # Otherwise roll for a Special type
 
             else:
-                logger.debug('Determining Special object type')  
+                logger.debug('Determining Special object type')
                 roll = dice.D6Rollx2()
 
                 # Handle non-giants first
@@ -204,7 +204,7 @@ class Star:
                     star_details = self.genGiantStar()
                     self.star_class = star_details[0]
                     self.star_type = star_details[1]
-                    self.star_subtype = star_details[2]                    
+                    self.star_subtype = star_details[2]
 
         # Modified rolls of 12 or greater are Hot stars, handle them here
 
@@ -246,8 +246,8 @@ class Star:
         query_result = query_result[0]
 
         # Vary the stellar mass around the base mass by up to 20%
-        # Using a normal distribution with a standard deviation of 7% 
-        # of the base mass, so about 99.5% of values will fall within 
+        # Using a normal distribution with a standard deviation of 7%
+        # of the base mass, so about 99.5% of values will fall within
         # the 20% value
 
         # Because numpy.random can return multiple values, select the first
@@ -255,7 +255,7 @@ class Star:
         # Round the result to 3 decimals and return
 
         mass = numpy.random.normal(query_result['baseMass'], query_result['baseMass'] * 0.07, 1)[0]
-        self.star_mass_variance = mass/query_result['baseMass'] 
+        self.star_mass_variance = mass/query_result['baseMass']
         self.star_mass = round(mass, 3)
         logger.debug('Star mass is %s solar masses', self.star_mass)
 
@@ -380,7 +380,7 @@ class Star:
             # Now calculate the lifespan of the star as a giant
 
             giant_lifespan = round(main_sequence_lifespan / (10 * self.star_mass ** 3), 3)
-            logger.debug('Giant lifespan is %s Gy', giant_lifespan)   
+            logger.debug('Giant lifespan is %s Gy', giant_lifespan)
 
             # Getting the variance value (place in giant lifespan)
 
