@@ -113,7 +113,7 @@ class System:
         # Generate the primary
 
         star_Primary = star.Star()
-        star_Primary.genStar(0, False, True)
+        star_Primary.gen_star(0, False, True)
         self.Stars.append(star_Primary)
 
     # Write system details to a JSON document
