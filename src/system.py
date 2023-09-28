@@ -125,6 +125,17 @@ class System:
 
         # Generate companions
 
+        for companion_orbit_type in primary_star.star_companions:
+
+            # Check for the presence of a companion object in the orbit band
+            if primary_star.star_companions[companion_orbit_type] is True:
+
+                # Ok, now generate the companion
+
+                pass
+
+        # Generate companions of companions (to be done)
+
 if __name__ == '__main__':
     these_Systems = []
     for x in range(1, 51):
