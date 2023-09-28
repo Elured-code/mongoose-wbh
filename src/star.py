@@ -40,18 +40,32 @@ class Star:
         self.star_class = ""
         self.star_mass = 0
         self.star_diameter = 0
+        self.star_pos = ()  # Tuple containing the star orbit type and primary
+                            # or ("main", "main") if a primary
+        self.star_companions = {"Close": False, "Near": False, "Far": False}
 
     # Class properties go here
     # Using properties to leave open the possibility of verifying and modifying
     # values as they are set
 
     @property
+    def star_pos(self):
+        """Get star_pos"""
+        return self.__star_pos
+
+    @star_pos.setter
+    def star_pos(self, star_pos):
+        """Set star_pos"""
+        self.__star_pos = star_pos
+
+    @property
     def star_name(self):
-        """The name of the stellar object (not necessarily the system name)"""
+        """Get star name"""
         return self.__star_name
 
     @star_name.setter
     def star_name(self, star_name):
+        """Set star name"""
         self.__star_name = star_name
 
     @property
@@ -661,12 +675,38 @@ class Star:
 
         return star_class, star_type, star_subtype
 
+    def gen_companions(self):
+        """Test for the presence of companion stars or substellar objects"""
+
+        # First determine the roll DM
+
+        dice_modifier = 0
+        if self.star_class in ("Ia", "Ib", "II", "III", "IV"):
+            dice_modifier += 1
+        elif self.star_class in ("V", "VI"):
+            if self.star_type in ("O", "B", "A", "F"):
+                dice_modifier += 1
+            elif self.star_type == "M":
+                dice_modifier -= 1
+        elif self.star_class in ("BD", "D", "P", "NS", "BH"):
+            dice_modifier -= 1
+
+        # Now check each orbit class for a companion object
+
+        if dice.D6Rollx2() + dice_modifier >= 10:
+            self.star_companions["Close"] = True
+        if dice.D6Rollx2() + dice_modifier >= 10:
+            self.star_companions["Near"] = True
+        if dice.D6Rollx2() + dice_modifier >= 10:
+            self.star_companions["Far"] = True
+
     # Generate the star, calling the previous object methods to determine
     # stellar characteristics
     #
 
-    def gen_star(self, die_modifier, include_unusual, is_primary):
+    def gen_main_star(self, die_modifier, include_unusual, is_primary):
         """Rollup method to execute the stellar generation process"""
+        self.star_pos = ("main", "main")
         self.genstar_type(die_modifier, include_unusual, is_primary)
         self.genstar_mass()
         self.genstar_temp()
@@ -680,10 +720,14 @@ class Star:
         if self.star_type == "":
             input("Press Enter to continue...")
 
+class CompanionStar(Star):
+    """Generate a companion star, using methods from the Star class
+    as much as possible"""
+
 
 if __name__ == "__main__":
     thisStar = Star()
-    thisStar.gen_star(0, False, True)
+    thisStar.gen_main_star(0, False, True)
 
     print("Mass", thisStar.star_mass)
     print("Variance", thisStar.star_mass_variance)

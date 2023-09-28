@@ -120,8 +120,10 @@ class System:
         # Generate the primary
 
         primary_star = star.Star()
-        primary_star.gen_star(0, False, True)
+        primary_star.gen_main_star(0, False, True)
         self.system_stars.append(primary_star)
+
+        # Generate companions
 
 if __name__ == '__main__':
     these_Systems = []
