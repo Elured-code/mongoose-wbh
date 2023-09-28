@@ -34,118 +34,114 @@ logger.setLevel(logging.INFO)
 
 # Create a JSON object containing the system data
 
-def createSystemJSON(System):
-        '''Create a JSON string that represents the mainworld data'''
 
-        logger.debug('Creating JSON object for %s', System.systemName)
+def create_system_json(a_system):
+    '''Create a JSON string that represents the mainworld data'''
 
-        outputJSON = {}
-        mainWorldJSON = {}
+    logger.debug('Creating JSON object for %s', a_system.system_name)
 
-        # Create the JSON header and populate
+    output_json = {}
+    # mainworld_json = {}
 
-        headerJSON = {}
-        headerJSON['Object Type'] = 'System'
-        headerJSON['Rules System'] = 'Mongoose Traveller'
-        headerJSON['Edition'] = '2'
-        headerJSON['Version'] = '2023'
-        headerJSON['Extensions'] = 'TBC'
+    # Create the JSON header and populate
 
-        outputJSON['Header'] = headerJSON
+    header_json = {}
+    header_json['Object Type'] = 'System'
+    header_json['Rules System'] = 'Mongoose Traveller'
+    header_json['Edition'] = '2'
+    header_json['Version'] = '2023'
+    header_json['Extensions'] = 'TBC'
 
-        systemJSON = {}
-        systemJSON['System Name'] = System.systemName
+    output_json['Header'] = header_json
 
-        outputJSON['Description'] = systemJSON
-        contentsJSON = ['Contents']
+    system_json = {}
+    system_json['System Name'] = a_system.system_name
 
-        starsJSON = []
-        starsJSON.append('Stars')
-        for star in System.Stars:
-            i = 0
-            starJSON = {}
-            starJSON['Index'] = i
-            starJSON['Stellar Type'] = star.star_type
-            starJSON['Subtype'] = star.star_subtype
-            starJSON['Stellar Class'] = star.star_class
-            starJSON['Stellar Mass'] = star.star_mass
-            starJSON['Stellar Surface Temperature'] = star.star_temp
-            starJSON['Stellar Diameter'] = star.star_diameter
-            starJSON['Stellar Luminosity'] = star.star_luminosity
-            starJSON['Stellar Age'] = star.star_age
-            starJSON['Stellar Colour'] = star.star_colour
-            
-            starsJSON.append(starJSON)
-            
-            i += 1
-        
-        outputJSON['Contents'] = starsJSON
-        return outputJSON
+    output_json['Description'] = system_json
+    # contents_json = ['Contents']
+
+    stars_json = []
+    stars_json.append('Stars')
+    for this_star in a_system.system_stars:
+        index_value = 0
+        star_json = {}
+        star_json['Index'] = index_value
+        star_json['Stellar Type'] = this_star.star_type
+        star_json['Subtype'] = this_star.star_subtype
+        star_json['Stellar Class'] = this_star.star_class
+        star_json['Stellar Mass'] = this_star.star_mass
+        star_json['Stellar Surface Temperature'] = this_star.star_temp
+        star_json['Stellar Diameter'] = this_star.star_diameter
+        star_json['Stellar Luminosity'] = this_star.star_luminosity
+        star_json['Stellar Age'] = this_star.star_age
+        star_json['Stellar Colour'] = this_star.star_colour
+
+        stars_json.append(star_json)
+
+        index_value += 1
+
+    output_json['Contents'] = stars_json
+    return output_json
 
 
 # System class - container class for a WBH hex location
 
 class System:
+    """Class to hold a MGT2 system/hex"""
 
     def __init__(self, name):
         logger.debug('Initialising system object for system %s',name)
-        self.systemName = name
-        self.Stars = []
+        self.system_name = name
+        self.system_stars = []
 
     @property
-    def systemName(self):
-        return self.__systemName
-    
-    @systemName.setter
-    def systemName(self, systemName):
-        self.__systemName = systemName
+    def system_name(self):
+        """Get system_name"""
+        return self.__system_name
+
+    @system_name.setter
+    def system_name(self, system_name):
+        """Set system_name"""
+        self.__system_name = system_name
 
     @property
-    def Stars(self):
-        return self.__Stars
-    
-    @Stars.setter
-    def Stars(self, Stars):
-        self.__Stars = Stars
+    def system_stars(self):
+        """Get system_stars"""
+        return self.__system_stars
 
-    def genSystem(self):
+    @system_stars.setter
+    def system_stars(self, system_stars):
+        """Set system_stars"""
+        self.__system_stars = system_stars
+
+    def generate_system(self):
+        """Generate the system/hex contents"""
 
         # Generate the primary
 
-        star_Primary = star.Star()
-        star_Primary.gen_star(0, False, True)
-        self.Stars.append(star_Primary)
-
-    # Write system details to a JSON document
-
-    def createJSON(self):
-        pass
+        primary_star = star.Star()
+        primary_star.gen_star(0, False, True)
+        self.system_stars.append(primary_star)
 
 if __name__ == '__main__':
     these_Systems = []
     for x in range(1, 51):
         this_System = System('Test System')
-        this_System.genSystem()
+        this_System.generate_system()
         these_Systems.append(this_System)
 
     j = 0
     for a_System in these_Systems:
-        
+
         i = 0
-        for star in a_System.Stars:
-            if star.star_class in ('Ia', 'Ib', 'II'):
-                print('System %s \tIndex %s: \t%s%s %s \tAge %s \tMass %s' % \
-                (j+1, i, star.star_type, star.star_subtype, star.star_class, \
-                star.star_age, star.star_mass))
+        for star in a_System.system_stars:
+            if star.star_class in ('V'):
+                print(f'System {j+1}\tIndex {i}\t{star.star_type}\
+                      {star.star_subtype} {star.star_class}')
+
             i += 1
         j += 1
 
-    systemJSON = json.dumps(createSystemJSON(this_System), indent=4)
+    systemJSON = json.dumps(create_system_json(this_System), indent=4)
 
-    print(systemJSON)
-
-
-
-
-
-    
+    #print(systemJSON)
