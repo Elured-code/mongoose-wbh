@@ -120,21 +120,26 @@ class System:
         # Generate the primary
 
         primary_star = star.Star()
-        primary_star.gen_main_star(0, False, True)
+        primary_star.gen_star(0, False, True)
         self.system_stars.append(primary_star)
 
         # Generate companions
 
         for companion_orbit_type in primary_star.star_companions:
 
-            # Check for the presence of a companion object in the orbit band
-            if primary_star.star_companions[companion_orbit_type] is True:
+            # Only check for Close, Near and Far orbits
 
-                # Ok, now generate the companion
+            if companion_orbit_type != "Companion":
 
-                pass
+                # Check for the presence of a companion object in the orbit band
+                if primary_star.star_companions[companion_orbit_type] is True:
 
-        # Generate companions of companions (to be done)
+                    # Ok, now generate the companion
+
+                    companion_star = star.CompanionStar(companion_orbit_type)
+                    companion_star.gen_star()
+
+
 
 if __name__ == '__main__':
     these_Systems = []

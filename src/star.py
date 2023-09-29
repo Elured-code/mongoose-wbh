@@ -42,7 +42,8 @@ class Star:
         self.star_diameter = 0
         self.star_pos = ()  # Tuple containing the star orbit type and primary
                             # or ("main", "main") if a primary
-        self.star_companions = {"Close": False, "Near": False, "Far": False}
+        self.star_companions = {"Companion": False, "Close": False,
+                                "Near": False, "Far": False}
 
     # Class properties go here
     # Using properties to leave open the possibility of verifying and modifying
@@ -615,8 +616,7 @@ class Star:
 
             # Cap the roll at 8 to avoid the 'Hot' result
 
-            if roll >= 8:
-                roll = 8
+            roll = max(roll, 8)
 
             star_type = tables.STAR_TYPES[roll]
 
@@ -704,7 +704,7 @@ class Star:
     # stellar characteristics
     #
 
-    def gen_main_star(self, die_modifier, include_unusual, is_primary):
+    def gen_star(self, die_modifier, include_unusual, is_primary):
         """Rollup method to execute the stellar generation process"""
         self.star_pos = ("main", "main")
         self.genstar_type(die_modifier, include_unusual, is_primary)
@@ -724,13 +724,119 @@ class CompanionStar(Star):
     """Generate a companion star, using methods from the Star class
     as much as possible"""
 
+    # Initialise
+
+    def __init__(self):
+        """Initialise CompanionStar"""
+
+        # Execute star.__init__ first to initialise common properties
+
+        super().__init__()
+
+        # Override any properties here
+
+        # New properties here
+
+        self.__star_orbit_type  = ""
+        self.__star_orbit_value = 0
+
+    #
+    # Properties
+    #
+
+    @property
+    def star_orbit_type(self):
+        """Get star_orbit"""
+        return self.__star_orbit_type
+
+    @star_orbit_type.setter
+    def star_orbit_type(self, star_orbit_type):
+        """Set star orbit"""
+        self.__star_orbit_type = star_orbit_type
+
+    @property
+    def star_orbit_value(self):
+        """Get star_orbit_value"""
+        return self.__star_orbit_value
+
+    @star_orbit_value.setter
+    def star_orbit_value(self, star_orbit_value):
+        """Set star orbit"""
+        self.__star_orbit_value = star_orbit_value
+
+    #
+    # Methods
+    #
+
+    def gen_orbit_value(self):
+        """Generate orbit value"""
+
+        # Companion stars first
+
+        if self.__star_orbit_type == "Companion":
+
+            #   1D÷10 + (2D-7)÷100
+
+            self.__star_orbit_value = (dice.D10Roll()/10) + \
+            (dice.D6Rollx2() - 7)/100
+
+        # Now Close stars
+
+        elif self.__star_orbit_type == "Close":
+
+            # 1D-1*
+
+            self.__star_orbit_value = dice.D6Roll() - 1
+
+        # Near stars
+
+        elif self.__star_orbit_type == "Near":
+
+            # 1D+5
+
+            self.__star_orbit_value = dice.D6Roll() + 5
+
+        # Far Stars
+
+        elif self.__star_orbit_type == "Far":
+
+            # 1D+11
+
+            self.__star_orbit_value = dice.D6Roll() + 11
+
+        # Catch any other orbit type value and throw an exception
+
+        else:
+            error_string = 'Invalid value for star orbit type (' + \
+                f'{self.__star_orbit_type})'
+            raise ValueError(error_string)
+
+        # Done with gross orbit value generation
+        # Apply orbit variance (Close types already do this in the calculation)
+
+        if self.__star_orbit_type != "Close":
+            if self.__star_orbit_value == 0:
+                self.__star_orbit_value = 0.5
+            else:
+                orbit_variance = (dice.D100Roll() - 50)/100
+                self.__star_orbit_value += orbit_variance
+
+        # Round to 2 decimals
+
+        self.__star_orbit_value = round(self.__star_orbit_value, 2)
 
 if __name__ == "__main__":
-    thisStar = Star()
-    thisStar.gen_main_star(0, False, True)
+    # thisStar = Star()
+    # thisStar.gen_star(0, False, True)
 
-    print("Mass", thisStar.star_mass)
-    print("Variance", thisStar.star_mass_variance)
-    print("Temperature", thisStar.star_temp)
-    print("Diameter", thisStar.star_diameter)
-    print("Luminosity", thisStar.star_luminosity)
+    # print("Mass", thisStar.star_mass)
+    # print("Variance", thisStar.star_mass_variance)
+    # print("Temperature", thisStar.star_temp)
+    # print("Diameter", thisStar.star_diameter)
+    # print("Luminosity", thisStar.star_luminosity)
+
+    for int_counter in range(1, 10):
+        thisStar = CompanionStar()
+        thisStar.star_orbit_type = "Far"
+        thisStar.gen_orbit_value()
+        print(thisStar.star_orbit_value)
