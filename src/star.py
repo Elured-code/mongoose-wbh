@@ -704,9 +704,9 @@ class Star:
     # stellar characteristics
     #
 
-    def gen_star(self, die_modifier, include_unusual, is_primary):
+    def gen_star(self, die_modifier, include_unusual, is_primary, star_pos):
         """Rollup method to execute the stellar generation process"""
-        self.star_pos = ("main", "main")
+        self.star_pos = star_pos
         self.genstar_type(die_modifier, include_unusual, is_primary)
         self.genstar_mass()
         self.genstar_temp()
@@ -714,6 +714,7 @@ class Star:
         self.genstar_luminosity()
         self.genstar_age()
         self.genstar_colour()
+        self.gen_companions()
 
         # Debugging code to catch non-typed stars
 
@@ -726,7 +727,7 @@ class CompanionStar(Star):
 
     # Initialise
 
-    def __init__(self):
+    def __init__(self, star_orbit_type):
         """Initialise CompanionStar"""
 
         # Execute star.__init__ first to initialise common properties
@@ -737,8 +738,9 @@ class CompanionStar(Star):
 
         # New properties here
 
-        self.__star_orbit_type  = ""
+        self.__star_orbit_type  = star_orbit_type
         self.__star_orbit_value = 0
+        self.__star_pos = ("", "")
 
     #
     # Properties
@@ -825,18 +827,22 @@ class CompanionStar(Star):
 
         self.__star_orbit_value = round(self.__star_orbit_value, 2)
 
+    def gen_star(self, die_modifier, include_unusual, is_primary, star_pos):
+        super().gen_star(die_modifier, include_unusual, is_primary, star_pos)
+        self.star_pos = star_pos
+
 if __name__ == "__main__":
-    # thisStar = Star()
-    # thisStar.gen_star(0, False, True)
+    thisStar = Star()
+    thisStar.gen_star(0, False, True, ("Main", "Main"))
 
-    # print("Mass", thisStar.star_mass)
-    # print("Variance", thisStar.star_mass_variance)
-    # print("Temperature", thisStar.star_temp)
-    # print("Diameter", thisStar.star_diameter)
-    # print("Luminosity", thisStar.star_luminosity)
+    print("Mass", thisStar.star_mass)
+    print("Variance", thisStar.star_mass_variance)
+    print("Temperature", thisStar.star_temp)
+    print("Diameter", thisStar.star_diameter)
+    print("Luminosity", thisStar.star_luminosity)
 
-    for int_counter in range(1, 10):
-        thisStar = CompanionStar()
-        thisStar.star_orbit_type = "Far"
-        thisStar.gen_orbit_value()
-        print(thisStar.star_orbit_value)
+    # for int_counter in range(1, 10):
+    #     thisStar = CompanionStar()
+    #     thisStar.star_orbit_type = "Far"
+    #     thisStar.gen_orbit_value()
+    #     print(thisStar.star_orbit_value)

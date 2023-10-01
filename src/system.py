@@ -62,10 +62,12 @@ def create_system_json(a_system):
 
     stars_json = []
     stars_json.append('Stars')
+
+    index_value = 0
     for this_star in a_system.system_stars:
-        index_value = 0
         star_json = {}
         star_json['Index'] = index_value
+        star_json['Position'] = this_star.star_pos
         star_json['Stellar Type'] = this_star.star_type
         star_json['Subtype'] = this_star.star_subtype
         star_json['Stellar Class'] = this_star.star_class
@@ -120,7 +122,7 @@ class System:
         # Generate the primary
 
         primary_star = star.Star()
-        primary_star.gen_star(0, False, True)
+        primary_star.gen_star(0, False, True, ("Main", "Main"))
         self.system_stars.append(primary_star)
 
         # Generate companions
@@ -137,13 +139,18 @@ class System:
                     # Ok, now generate the companion
 
                     companion_star = star.CompanionStar(companion_orbit_type)
-                    companion_star.gen_star()
+                    companion_star.gen_star(0, False, False,
+                    ("Main", companion_orbit_type))
+
+                    # Add the companion to the system object
+
+                    self.system_stars.append(companion_star)
 
 
 
 if __name__ == '__main__':
     these_Systems = []
-    for x in range(1, 51):
+    for x in range(1, 5):
         this_System = System('Test System')
         this_System.generate_system()
         these_Systems.append(this_System)
@@ -162,4 +169,4 @@ if __name__ == '__main__':
 
     systemJSON = json.dumps(create_system_json(this_System), indent=4)
 
-    #print(systemJSON)
+    print(systemJSON)

@@ -21,7 +21,7 @@ def fixture_star_collection():
         star_name = 'Test' + str(i)
         this_star = Star()
         this_star.star_name = star_name
-        this_star.gen_star(0, False, False)
+        this_star.gen_star(0, False, False, ("Main", "Main"))
         data = {'Star Age': this_star.star_age}
         data['Star Class'] =  this_star.star_class
         data['Star Type'] = this_star.star_type
