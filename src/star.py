@@ -694,6 +694,8 @@ class Star:
         # Now check each orbit class for a companion object
 
         if dice.D6Rollx2() + dice_modifier >= 10:
+            self.star_companions["Companion"] = True
+        if dice.D6Rollx2() + dice_modifier >= 10:
             self.star_companions["Close"] = True
         if dice.D6Rollx2() + dice_modifier >= 10:
             self.star_companions["Near"] = True
@@ -738,9 +740,9 @@ class CompanionStar(Star):
 
         # New properties here
 
-        self.__star_orbit_type  = star_orbit_type
-        self.__star_orbit_value = 0
-        self.__star_pos = ("", "")
+        self.star_orbit_type  = star_orbit_type
+        self.star_orbit_value = 0
+        self.star_pos = ("", "")
 
     #
     # Properties
@@ -775,61 +777,63 @@ class CompanionStar(Star):
 
         # Companion stars first
 
-        if self.__star_orbit_type == "Companion":
+        if self.star_orbit_type == "Companion":
 
             #   1D÷10 + (2D-7)÷100
 
-            self.__star_orbit_value = (dice.D10Roll()/10) + \
+            self.star_orbit_value = (dice.D10Roll()/10) + \
             (dice.D6Rollx2() - 7)/100
 
         # Now Close stars
 
-        elif self.__star_orbit_type == "Close":
+        elif self.star_orbit_type == "Close":
 
             # 1D-1*
 
-            self.__star_orbit_value = dice.D6Roll() - 1
+            self.star_orbit_value = dice.D6Roll() - 1
 
         # Near stars
 
-        elif self.__star_orbit_type == "Near":
+        elif self.star_orbit_type == "Near":
 
             # 1D+5
 
-            self.__star_orbit_value = dice.D6Roll() + 5
+            self.star_orbit_value = dice.D6Roll() + 5
 
         # Far Stars
 
-        elif self.__star_orbit_type == "Far":
+        elif self.star_orbit_type == "Far":
 
             # 1D+11
 
-            self.__star_orbit_value = dice.D6Roll() + 11
+            self.star_orbit_value = dice.D6Roll() + 11
 
         # Catch any other orbit type value and throw an exception
 
         else:
             error_string = 'Invalid value for star orbit type (' + \
-                f'{self.__star_orbit_type})'
+                f'{self.star_orbit_type})'
             raise ValueError(error_string)
 
         # Done with gross orbit value generation
         # Apply orbit variance (Close types already do this in the calculation)
 
-        if self.__star_orbit_type != "Close":
-            if self.__star_orbit_value == 0:
-                self.__star_orbit_value = 0.5
+        if self.star_orbit_type != "Close":
+            if self.star_orbit_value == 0:
+                self.star_orbit_value = 0.5
             else:
                 orbit_variance = (dice.D100Roll() - 50)/100
-                self.__star_orbit_value += orbit_variance
+                self.star_orbit_value += orbit_variance
 
         # Round to 2 decimals
 
-        self.__star_orbit_value = round(self.__star_orbit_value, 2)
+        self.star_orbit_value = round(self.star_orbit_value, 2)
 
     def gen_star(self, die_modifier, include_unusual, is_primary, star_pos):
+
         super().gen_star(die_modifier, include_unusual, is_primary, star_pos)
         self.star_pos = star_pos
+        self.gen_orbit_value()
 
 if __name__ == "__main__":
     thisStar = Star()

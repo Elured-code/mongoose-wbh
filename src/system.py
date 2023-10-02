@@ -78,6 +78,11 @@ def create_system_json(a_system):
         star_json['Stellar Age'] = this_star.star_age
         star_json['Stellar Colour'] = this_star.star_colour
 
+        # Add items specific to companion stars
+
+        if this_star.star_pos[1] != "Main":
+            star_json['Stellar Orbit Position'] = this_star.star_orbit_value
+
         stars_json.append(star_json)
 
         index_value += 1
@@ -129,22 +134,18 @@ class System:
 
         for companion_orbit_type in primary_star.star_companions:
 
-            # Only check for Close, Near and Far orbits
+            # Check for the presence of a companion object in the orbit band
+            if primary_star.star_companions[companion_orbit_type] is True:
 
-            if companion_orbit_type != "Companion":
+                # Ok, now generate the companion
 
-                # Check for the presence of a companion object in the orbit band
-                if primary_star.star_companions[companion_orbit_type] is True:
+                companion_star = star.CompanionStar(companion_orbit_type)
+                companion_star.gen_star(0, False, False,
+                ("Main", companion_orbit_type))
 
-                    # Ok, now generate the companion
+                # Add the companion to the system object
 
-                    companion_star = star.CompanionStar(companion_orbit_type)
-                    companion_star.gen_star(0, False, False,
-                    ("Main", companion_orbit_type))
-
-                    # Add the companion to the system object
-
-                    self.system_stars.append(companion_star)
+                self.system_stars.append(companion_star)
 
 
 
