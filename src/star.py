@@ -616,7 +616,7 @@ class Star:
 
             # Cap the roll at 8 to avoid the 'Hot' result
 
-            roll = max(roll, 8)
+            roll = min(roll, 8)
 
             star_type = tables.STAR_TYPES[roll]
 
@@ -782,7 +782,7 @@ class CompanionStar(Star):
             #   1D÷10 + (2D-7)÷100
 
             self.star_orbit_value = (dice.D10Roll()/10) + \
-            (dice.D6Rollx2() - 7)/100
+            ((dice.D6Rollx2() - 7)/100)
 
         # Now Close stars
 
