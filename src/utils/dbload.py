@@ -1,3 +1,5 @@
+"""dbload.py - load stellar data into a TinyDB database"""
+
 # PyLint rule customisations
 # pylint: disable=wrong-import-position
 # pylint: disable=too-many-instance-attributes

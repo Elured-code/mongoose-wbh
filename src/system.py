@@ -11,6 +11,7 @@ import json
 import logging
 import os
 import sys
+from tinydb import TinyDB
 
 # Set the Python path to allow module discovery
 
@@ -138,10 +139,15 @@ class System:
 
 if __name__ == '__main__':
     these_Systems = []
-    for x in range(1, 51):
+    for x in range(1, 11):
         this_System = System('Test System')
         this_System.generate_system()
         these_Systems.append(this_System)
+        db = TinyDB('systems.db')
+        this_system_json = json.dumps(create_system_json(this_System), indent = 4)
+        this_system_dict = json.loads(this_system_json)
+        db.insert(this_system_dict)
+
 
     j = 0
     for a_System in these_Systems:
@@ -151,10 +157,9 @@ if __name__ == '__main__':
             if star.star_class in ('V'):
                 print(f'System {j+1}\tIndex {i}\t{star.star_type}\
                       {star.star_subtype} {star.star_class}')
-
             i += 1
         j += 1
 
     systemJSON = json.dumps(create_system_json(this_System), indent=4)
 
-    #print(systemJSON)
+    print(systemJSON)
