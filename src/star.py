@@ -19,7 +19,7 @@ from tinydb import TinyDB, Query
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(os.path.dirname(SCRIPT_DIR))
 
-# Import local modules
+# Import local modules as required
 
 from src.utils import dice
 from src.utils import tables
@@ -41,9 +41,13 @@ class Star:
         self.star_mass = 0
         self.star_diameter = 0
         self.star_pos = ()  # Tuple containing the star orbit type and primary
-                            # or ("main", "main") if a primary
-        self.star_companions = {"Companion": False, "Close": False,
-                                "Near": False, "Far": False}
+        # or ("main", "main") if a primary
+        self.star_companions = {
+            "Companion": False,
+            "Close": False,
+            "Near": False,
+            "Far": False,
+        }
 
     # Class properties go here
     # Using properties to leave open the possibility of verifying and modifying
@@ -490,7 +494,10 @@ class Star:
             star_subtype = tables.STAR_SUBTYPES[roll]
 
         logger.debug(
-            "Returning class %s, type %s, subtype %s", star_class, star_type, star_subtype
+            "Returning class %s, type %s, subtype %s",
+            star_class,
+            star_type,
+            star_subtype,
         )
         return star_class, star_type, star_subtype
 
@@ -510,7 +517,10 @@ class Star:
         star_subtype = tables.STAR_SUBTYPES[roll]
 
         logger.debug(
-            "Returning class %s, type %s, subtype %s", star_class, star_type, star_subtype
+            "Returning class %s, type %s, subtype %s",
+            star_class,
+            star_type,
+            star_subtype,
         )
         return star_class, star_type, star_subtype
 
@@ -574,7 +584,10 @@ class Star:
             star_subtype = tables.STAR_SUBTYPES[roll]
 
         logger.debug(
-            "Returning class %s, type %s, subtype %s", star_class, star_type, star_subtype
+            "Returning class %s, type %s, subtype %s",
+            star_class,
+            star_type,
+            star_subtype,
         )
         return star_class, star_type, star_subtype
 
@@ -587,7 +600,7 @@ class Star:
         star_class = "IV"
         logging.debug("Determining Subgiant type")
         roll = dice.D6Rollx2() - 3 + 1  # +1 die_modifier for class rolls
-                                        # -3 to match table index
+        # -3 to match table index
 
         # Deal with hot subgiants first
 
@@ -723,6 +736,7 @@ class Star:
         if self.star_type == "":
             input("Press Enter to continue...")
 
+
 class CompanionStar(Star):
     """Generate a companion star, using methods from the Star class
     as much as possible"""
@@ -740,7 +754,7 @@ class CompanionStar(Star):
 
         # New properties here
 
-        self.star_orbit_type  = star_orbit_type
+        self.star_orbit_type = star_orbit_type
         self.star_orbit_value = 0
         self.star_pos = ("", "")
 
@@ -778,16 +792,15 @@ class CompanionStar(Star):
         # Companion stars first
 
         if self.star_orbit_type == "Companion":
-
             #   1D÷10 + (2D-7)÷100
 
-            self.star_orbit_value = (dice.D10Roll()/10) + \
-            ((dice.D6Rollx2() - 7)/100)
+            self.star_orbit_value = (dice.D10Roll() / 10) + (
+                (dice.D6Rollx2() - 7) / 100
+            )
 
         # Now Close stars
 
         elif self.star_orbit_type == "Close":
-
             # 1D-1*
 
             self.star_orbit_value = dice.D6Roll() - 1
@@ -795,7 +808,6 @@ class CompanionStar(Star):
         # Near stars
 
         elif self.star_orbit_type == "Near":
-
             # 1D+5
 
             self.star_orbit_value = dice.D6Roll() + 5
@@ -803,7 +815,6 @@ class CompanionStar(Star):
         # Far Stars
 
         elif self.star_orbit_type == "Far":
-
             # 1D+11
 
             self.star_orbit_value = dice.D6Roll() + 11
@@ -811,8 +822,9 @@ class CompanionStar(Star):
         # Catch any other orbit type value and throw an exception
 
         else:
-            error_string = 'Invalid value for star orbit type (' + \
-                f'{self.star_orbit_type})'
+            error_string = (
+                "Invalid value for star orbit type (" + f"{self.star_orbit_type})"
+            )
             raise ValueError(error_string)
 
         # Done with gross orbit value generation
@@ -822,7 +834,7 @@ class CompanionStar(Star):
             if self.star_orbit_value == 0:
                 self.star_orbit_value = 0.5
             else:
-                orbit_variance = (dice.D100Roll() - 50)/100
+                orbit_variance = (dice.D100Roll() - 50) / 100
                 self.star_orbit_value += orbit_variance
 
         # Round to 2 decimals
@@ -830,10 +842,10 @@ class CompanionStar(Star):
         self.star_orbit_value = round(self.star_orbit_value, 2)
 
     def gen_star(self, die_modifier, include_unusual, is_primary, star_pos):
-
         super().gen_star(die_modifier, include_unusual, is_primary, star_pos)
         self.star_pos = star_pos
         self.gen_orbit_value()
+
 
 if __name__ == "__main__":
     thisStar = Star()
