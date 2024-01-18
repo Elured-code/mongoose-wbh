@@ -151,7 +151,7 @@ class System:
 
 if __name__ == "__main__":
     these_Systems = []
-    for x in range(1, 11):
+    for x in range(1, 101):
         this_System = System("Test System")
         this_System.generate_system()
         these_Systems.append(this_System)
@@ -164,14 +164,13 @@ if __name__ == "__main__":
     for a_System in these_Systems:
         i = 0
         for star in a_System.system_stars:
-            if star.star_class in ("V"):
-                print(
-                    f"System {j+1}\tIndex {i}\t{star.star_type}\
-                      {star.star_subtype} {star.star_class}"
-                )
+            print(f"System {j+1}\tIndex {i}\t{star.star_type}", end="")
+            print(f"{star.star_subtype} {star.star_class}\t", end="")
+            print(f"Mass {star.star_mass}\t", end="")
+            print(f"Age {star.star_age}")
             i += 1
         j += 1
 
-    systemJSON = json.dumps(create_system_json(this_System), indent=4)
+    # systemJSON = json.dumps(create_system_json(this_System), indent=4)
 
-    print(systemJSON)
+    # print(systemJSON)

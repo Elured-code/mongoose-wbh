@@ -348,7 +348,7 @@ class Star:
         # Handle non-post-main sequence stars first
         # This includes class Ia, Ib, II and VI
 
-        if self.star_class in ["Ia", "Ib", "II", "V", "VI"]:
+        if self.star_class in ["Ia", "Ib", "II", "III", "IV", "V", "VI", "D"]:
             logger.debug("Determining main sequence star age")
 
             # First determine the star lifespan
@@ -363,12 +363,7 @@ class Star:
 
             if self.star_mass <= 0.9:
                 logger.debug("Determining age of small main sequence star")
-                age = (
-                    (dice.D6Roll() * 2)
-                    + (dice.D3Roll() - 2)
-                    + (dice.D10Roll() / 10)
-                    + (dice.D10Roll() / 100)
-                )
+                age = (dice.D6Roll() * 2) + dice.D3Roll() - 2 + (dice.D10Roll() / 10)
 
             # Determine age for larger main sequence stars
 
@@ -376,56 +371,68 @@ class Star:
                 logger.debug("Determining age of large main sequence star")
                 age = round((main_sequence_lifespan * (dice.D100Roll() / 100)), 3)
 
-        # Subgiant (Class IV) stars
+            # Subgiant (Class IV) stars
 
-        elif self.star_class == "IV":
-            # First get the lifespan of the star in the main sequence
+            if self.star_class in ["Ia", "Ib", "II", "III", "IV"]:
+                # Now get the lifespan of the star as a subgiant
 
-            main_sequence_lifespan = round(10 / (self.star_mass**2.5), 3)
-            logger.debug(
-                "Main sequence star life span is %s Gy", main_sequence_lifespan
-            )
+                logger.debug("Determining age for subgiant star")
+                subgiant_lifespan = round(
+                    main_sequence_lifespan / (4 + self.star_mass), 3
+                )
+                logger.debug("Subgiant life span is %s Gy", subgiant_lifespan)
 
-            # Now get the lifespan of the star as a subgiant
+                # Determine the stars position in its life as a subgiant
 
-            logger.debug("Determining age for subgiant star")
-            subgiant_lifespan = round(main_sequence_lifespan / (4 + self.star_mass), 3)
-            logger.debug("Subgiant life span is %s Gy", subgiant_lifespan)
+                age = main_sequence_lifespan + (
+                    subgiant_lifespan * (dice.D100Roll() / 100)
+                )
+                age = round(age, 3)
 
-            # Determine the stars position in its life as a subgiant
+                # Giant (Class Ia, Ib, II, III) stars
 
-            age = main_sequence_lifespan + (subgiant_lifespan * (dice.D100Roll() / 100))
-            age = round(age, 3)
+                if self.star_class in ["Ia", "Ib", "II", "III"]:
+                    # Now calculate the lifespan of the star as a giant
 
-        # Giant (Class III) stars
+                    giant_lifespan = round(
+                        main_sequence_lifespan / (10 * self.star_mass**3), 3
+                    )
+                    logger.debug("Giant lifespan is %s Gy", giant_lifespan)
 
-        elif self.star_class == "III":
-            # First get the lifespan of the star in the main sequence
+                    # Getting the variance value (place in giant lifespan)
 
-            main_sequence_lifespan = round(10 / (self.star_mass**2.5), 3)
-            logger.debug(
-                "Main sequence star life span is %s Gy", main_sequence_lifespan
-            )
+                    variance = giant_lifespan * (dice.D10Roll() / 10)
 
-            # Then calculate the subgiant life span
+                    # Finally calculate the star age from previous values
 
-            subgiant_lifespan = round(main_sequence_lifespan / (4 + self.star_mass), 3)
-            logger.debug("Subgiant life span is %s Gy", subgiant_lifespan)
+                    age = round(
+                        main_sequence_lifespan + subgiant_lifespan + variance, 1
+                    )
 
-            # Now calculate the lifespan of the star as a giant
+                # Post-giant stars and objects
 
-            giant_lifespan = round(
-                main_sequence_lifespan / (10 * self.star_mass**3), 3
-            )
-            logger.debug("Giant lifespan is %s Gy", giant_lifespan)
+            elif self.star_class == "D":  # Will add other classes later
+                # Recalculate the life span based on the stars estimated
+                # original mass
 
-            # Getting the variance value (place in giant lifespan)
+                original_mass = (dice.D3Roll() + 2) * original_mass
+                main_sequence_lifespan = round(10 / (self.star_mass**2.5), 3)
 
-            variance = giant_lifespan * (dice.D1000Roll() / 100)
+                # Recalculate subgiant span period
 
-            # Finally calculate the star age from previous values
+                subgiant_lifespan = round(
+                    main_sequence_lifespan / (4 + self.star_mass), 3
+                )
 
-            age = round(main_sequence_lifespan + subgiant_lifespan + variance, 1)
+                # Now the giant period
+
+                giant_lifespan = round(
+                    main_sequence_lifespan / (10 * self.star_mass**3), 3
+                )
+
+                age = round(
+                    main_sequence_lifespan + subgiant_lifespan + giant_lifespan, 1
+                )
 
         else:
             # Placeholder to avoid crashes where i havent finished code
@@ -851,11 +858,16 @@ if __name__ == "__main__":
     thisStar = Star()
     thisStar.gen_star(0, False, True, ("Main", "Main"))
 
+    print(
+        "Type",
+        thisStar.star_type + str(thisStar.star_subtype) + " " + thisStar.star_class,
+    )
     print("Mass", thisStar.star_mass)
-    print("Variance", thisStar.star_mass_variance)
+    # print("Variance", thisStar.star_mass_variance)
     print("Temperature", thisStar.star_temp)
     print("Diameter", thisStar.star_diameter)
     print("Luminosity", thisStar.star_luminosity)
+    print("Age", thisStar.star_age)
 
     # for int_counter in range(1, 10):
     #     thisStar = CompanionStar()
