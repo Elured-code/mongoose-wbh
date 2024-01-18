@@ -4,7 +4,6 @@
 # pylint: disable=wrong-import-position
 # pylint: disable=too-many-instance-attributes
 # pylint: disable=too-many-public-methods
-# pylint: disable=line-too-long
 # pylint: disable=too-many-lines
 
 from tinydb import TinyDB, Query
