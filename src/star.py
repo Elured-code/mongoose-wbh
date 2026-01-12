@@ -19,6 +19,10 @@ from tinydb import TinyDB, Query
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(os.path.dirname(SCRIPT_DIR))
 
+# Set the data directory
+
+DATA_DIR = os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..', 'data'))
+
 # Import local modules as required
 
 from src.utils import dice
@@ -253,7 +257,7 @@ class Star:
 
         # Build a query from the star class, type and subtype
 
-        star_details_db = TinyDB("db.json")
+        star_details_db = TinyDB(DATA_DIR + "/db.json", access_mode='r')
         this_query = Query()
         query_result = star_details_db.search(
             (this_query.star_class == self.star_class)
@@ -289,7 +293,7 @@ class Star:
 
         # Build a query from the star class, type and subtype
 
-        star_details_db = TinyDB("db.json")
+        star_details_db = TinyDB(DATA_DIR + "/db.json", access_mode='r')
         this_query = Query()
         query_result = star_details_db.search(
             (this_query.star_class == self.star_class)
@@ -311,7 +315,7 @@ class Star:
 
         # Build a query from the star class, type and subtype
 
-        star_details_db = TinyDB("db.json")
+        star_details_db = TinyDB(DATA_DIR + "/db.json", access_mode='r')
         this_query = Query()
         query_result = star_details_db.search(
             (this_query.star_class == self.star_class)
@@ -456,7 +460,7 @@ class Star:
     def genstar_colour(self):
         """Determine the star colour based on spectral class/subclass"""
         logger.debug("Determining star colour")
-        star_details_db = TinyDB("db.json")
+        star_details_db = TinyDB(DATA_DIR + "/db.json", access_mode='r')
         this_query = Query()
         query_result = star_details_db.search((this_query.star_type == self.star_type))
         query_result = query_result[0]

@@ -18,6 +18,10 @@ from tinydb import TinyDB
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(os.path.dirname(SCRIPT_DIR))
 
+# Set the data directory
+
+DATA_DIR = os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..', 'data'))
+
 # Import local modules
 
 from src import star
@@ -155,7 +159,7 @@ if __name__ == "__main__":
         this_System = System("Test System")
         this_System.generate_system()
         these_Systems.append(this_System)
-        db = TinyDB("systems.db")
+        db = TinyDB(DATA_DIR + "/systems.db")
         this_system_json = json.dumps(create_system_json(this_System), indent=4)
         this_system_dict = json.loads(this_system_json)
         db.insert(this_system_dict)
@@ -171,6 +175,6 @@ if __name__ == "__main__":
             i += 1
         j += 1
 
-    # systemJSON = json.dumps(create_system_json(this_System), indent=4)
+    systemJSON = json.dumps(create_system_json(this_System), indent=4)
 
-    # print(systemJSON)
+    print(systemJSON)
